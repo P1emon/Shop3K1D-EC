@@ -1,47 +1,42 @@
 ﻿@model MyEStore.Entities.HangHoa
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Product Detail";
 }
 
-<h1>@Model.TenHh</h1>
+<link rel="stylesheet" href="~/css/PDetail.css" />
 
-<div>
-    <h4>HangHoaVM</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaHh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaHh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenHh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenHh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hinh)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="~/Hinh/HangHoa/@Model.Hinh" alt="@Model.TenHh" class="hh-box-img" />
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DonGia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DonGia)
-        </dd>
-    </dl>
-    
-    <form asp-action="AddToCart"
-          asp-controller="Cart"
-          asp-route-id="@Model.MaHh">
-        Số lượng mua:
-        <input type="number" name="qty" value="1" min="0" style="width:45px;" />
-        <button class="btn btn-primary">Mua</button>
-    </form>
+<div class="container py-5">
+    <div class="card shadow-lg border-0" style="max-width: 900px; margin: auto; overflow: hidden;">
+        <div class="row g-0">
+            <!-- Image Section -->
+            <div class="col-md-5">
+                <img src="~/Hinh/HangHoa/@Model.Hinh" alt="@Model.TenHh" class="img-fluid rounded-start" style="object-fit: cover; height: 100%; max-height: 400px;">
+            </div>
 
+            <!-- Product Details -->
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h1 class="card-title fw-bold mb-3">@Model.TenHh</h1>
+                    @* <h4 class="text-muted mb-4">Product ID: @Model.MaHh</h4> *@
+                    <h2 class="text-danger fw-bold mb-4">
+                        @Decimal.Parse(@Model.DonGia.ToString()).ToString("N2") $
+                    </h2>
+
+                    <p class="card-text text-muted">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.
+                    </p>
+
+                    <!-- Add to Cart Form -->
+                    <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.MaHh" class="mt-4">
+                        <div class="d-flex align-items-center">
+                            <label for="qty" class="me-3 fw-bold">Quantity:</label>
+                            <input type="number" name="qty" value="1" min="1" class="form-control me-3" style="width: 80px;">
+                            <button class="btn btn-dark btn-lg">Add to Cart</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

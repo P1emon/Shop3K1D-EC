@@ -30,14 +30,14 @@
                                 Category
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1001">Đồng hồ</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1002">Laptop</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1003">Máy ảnh</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1004">Điện thoại</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1005">Nước hoa</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1006">Trang sức</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1007">Giày</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1008">Vali</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1000">Đồng hồ</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1001">Laptop</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1002">Máy ảnh</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1003">Điện thoại</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1004">Nước hoa</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1005">Trang sức</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1006">Giày</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1007">Vali</a></li>
                             </ul>
                         </li>
                         <!-- Home Link -->
@@ -69,7 +69,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="DangKy">Đăng ký</a>
+                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Register">Đăng ký</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Login">Đăng nhập</a>
@@ -80,6 +80,7 @@
             </div>
         </nav>
     </header>
+    @RenderSection("Scripts", required: false)
 
     <!-- Main Content -->
     <div class="container">

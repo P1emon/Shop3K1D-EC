@@ -32,7 +32,13 @@ namespace MyEStore.Controllers
 			return View(CartItems);
 		}
 
-		public IActionResult AddToCart(int id, int qty = 1)
+        [HttpGet]
+        public IActionResult GetCartCount()
+        {
+            var cartCount = CartItems.Sum(item => item.SoLuong);
+            return Json(cartCount);
+        }
+        public IActionResult AddToCart(int id, int qty = 1)
 		{
 			var cart = CartItems;
 			var cartItem = cart.SingleOrDefault(p => p.MaHh == id);

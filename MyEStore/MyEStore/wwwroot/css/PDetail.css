@@ -1,0 +1,61 @@
+﻿/* Container for the product detail */
+.container {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card styling */
+.card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+    .card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+/* Title styling */
+.card-title {
+    font-size: 2rem;
+    color: #333333;
+}
+
+/* Price styling */
+.text-danger {
+    font-size: 1.8rem;
+}
+
+/* Form styling */
+form .form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+}
+
+    form .form-control:focus {
+        outline: none;
+        border-color: #555;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 30px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    button:hover {
+        background-color: #333;
+        transform: scale(1.05);
+    }
+
+/* Image styling */
+.img-fluid {
+    object-fit: cover;
+    border-radius: 15px 0 0 15px;
+}

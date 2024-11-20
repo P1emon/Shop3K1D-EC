@@ -1,0 +1,48 @@
+﻿@model MyEStore.Models.RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
+    <div class="p-5 rounded shadow-lg" style="background-color: #ffffff; max-width: 500px; width: 100%;">
+        <h2 class="text-center fw-bold mb-4" style="color: #000;">Create Your Account</h2>
+        <p class="text-center text-muted mb-4">Join us today to start your journey!</p>
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="text-danger mb-3">@ViewBag.ThongBao</div>
+            <div class="form-group mb-3">
+                <label asp-for="UserName" class="form-label fw-bold">Username</label>
+                <input asp-for="UserName" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="form-label fw-bold">Password</label>
+                <input asp-for="Password" type="password" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                <input asp-for="FullName" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="Email" class="form-label fw-bold">Email</label>
+                <input asp-for="Email" type="email" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-lg">Register</button>
+            </div>
+        </form>
+        <p class="text-center mt-4 text-muted">
+            Already have an account?
+            <a href="/Customer/Login" class="text-decoration-none" style="color: #000;">Login</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.13/jquery.validate.unobtrusive.min.js"></script>
+}

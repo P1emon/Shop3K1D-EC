@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyEStore.Entities;
 using MyEStore.Models;
@@ -66,71 +67,73 @@ namespace MyEStore.Controllers
 			}
 		}
 
-		public async Task<IActionResult> PaypalCapture(string orderId, CancellationToken cancellationToken)
-		{
-			try
-			{
-				var response = await _paypalClient.CaptureOrder(orderId);
+        public async Task<IActionResult> PaypalCapture(string orderId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _paypalClient.CaptureOrder(orderId);
 
-				//nhớ kiểm tra status complete
-				if (response.status == "COMPLETED")
-				{
-					var reference = response.purchase_units[0].reference_id;//mã đơn hàng mình tạo ở trên
+                if (response.status == "COMPLETED")
+                {
+                    var reference = response.purchase_units[0].reference_id;
+                    var transactionId = response.purchase_units[0].payments.captures[0].id;
 
-					// Put your logic to save the transaction here
-					// You can use the "reference" variable as a transaction key
-					// 1. Tạo và Lưu đơn hàng vô database
-					// TransactionId của Seller: response.payments.captures[0].id
-					var hoaDon = new HoaDon
-					{
-						MaKh = User.FindFirstValue("UserId"),
-						NgayDat = DateTime.Now,
-						HoTen = User.Identity.Name,
-						DiaChi = "N/A",//tự update
-						CachThanhToan = "Paypal",
-						CachVanChuyen = "N/A",
-						MaTrangThai = 0, //Mới đặt hàng
-						GhiChu = $"reference_id={reference}, transactionId={response.purchase_units[0].payments.captures[0].id}"
-					};
-					_ctx.Add(hoaDon);
-					_ctx.SaveChanges();
-					foreach (var item in CartItems)
-					{
-						var cthd = new ChiTietHd
-						{
-							MaHd = hoaDon.MaHd,
-							MaHh = item.MaHh,
-							DonGia = item.DonGia,
-							SoLuong = item.SoLuong,
-							GiamGia = 1
-						};
-						_ctx.Add(cthd);
-					}
-					_ctx.SaveChanges();
-					//2. Xóa session giỏ hàng
-					HttpContext.Session.Set(CART_KEY, new List<CartItem>());
+                    var hoaDon = new HoaDon
+                    {
+                        MaKh = User.FindFirstValue("UserId"),
+                        NgayDat = DateTime.Now,
+                        HoTen = User.Identity.Name,
+                        DiaChi = "N/A",
+                        CachThanhToan = "Paypal",
+                        CachVanChuyen = "N/A",
+                        MaTrangThai = 0,
+                        GhiChu = $"reference_id={reference}, transactionId={transactionId}"
+                    };
+                    _ctx.Add(hoaDon);
+                    _ctx.SaveChanges();
 
-					return Ok(response);
-				}
-				else
-				{
-					return BadRequest(new { Message = "Có lỗi thanh toán" });
-				}
-			}
-			catch (Exception e)
-			{
-				var error = new
-				{
-					e.GetBaseException().Message
-				};
+                    foreach (var item in CartItems)
+                    {
+                        var cthd = new ChiTietHd
+                        {
+                            MaHd = hoaDon.MaHd,
+                            MaHh = item.MaHh,
+                            DonGia = item.DonGia,
+                            SoLuong = item.SoLuong,
+                            GiamGia = 1
+                        };
+                        _ctx.Add(cthd);
+                    }
+                    _ctx.SaveChanges();
 
-				return BadRequest(error);
-			}
+                    HttpContext.Session.Set(CART_KEY, new List<CartItem>());
+
+                    // Gửi dữ liệu qua TempData
+                    TempData["TransactionId"] = transactionId;
+                    TempData["ReferenceId"] = reference;
+
+                    return RedirectToAction("Success");
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Có lỗi thanh toán" });
+                }
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
 		}
 
-		public IActionResult Success()
-		{
-			return View();
-		}
-	}
+        public async Task<IActionResult> Success()
+        {
+            return View();
+        }
+
+    }
 }

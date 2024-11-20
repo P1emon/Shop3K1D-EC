@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MyEStore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <!-- Logo -->
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-shop"></i> MyEStore
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <!-- Dropdown Category -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Category
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1001">Đồng hồ</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1002">Laptop</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1003">Máy ảnh</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1004">Điện thoại</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1005">Nước hoa</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1006">Trang sức</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1007">Giày</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1008">Vali</a></li>
+                            </ul>
+                        </li>
+                        <!-- Home Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Home</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right-side links -->
+                    <ul class="navbar-nav">
+                        <!-- Cart Icon -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                                <i class="bi bi-cart"></i> Giỏ hàng
+                                <span class="badge bg-danger" id="cart-count">0</span>
+                            </a>
+                        </li>
+
+                        <!-- User Auth Links -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Chào <b>@User.Identity.Name</b></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Logout">Đăng xuất</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="DangKy">Đăng ký</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Login">Đăng nhập</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-top footer text-muted bg-dark text-white mt-4">
+        <div class="container text-center py-3">
+            &copy; 2024 - MyEStore - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-light">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

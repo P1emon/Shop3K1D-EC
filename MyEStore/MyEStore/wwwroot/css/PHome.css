@@ -1,0 +1,116 @@
+﻿/* Tổng quan */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; /* Nền trắng */
+    color: #000000; /* Văn bản đen */
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 20px 0;
+    color: #000000; /* Đen */
+    position: relative;
+    font-weight: bold;
+}
+
+    h1::after {
+        content: '';
+        width: 80px;
+        height: 3px;
+        background: #000000; /* Đen */
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 1s ease-out;
+}
+
+/* Hộp sản phẩm */
+.hh-box {
+    background-color: #ffffff; /* Trắng */
+    border: 1px solid #000000; /* Đen */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+    .hh-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .hh-box img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .hh-box:hover img {
+        transform: scale(1.05);
+    }
+
+.hh-box-content {
+    padding: 20px;
+}
+
+.hh-box-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #000000; /* Đen */
+}
+
+.hh-box-gia {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000; /* Đen */
+    margin-bottom: 15px;
+}
+
+.hh-box-mua {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff; /* Trắng */
+    background-color: #000000; /* Đen */
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    .hh-box-mua:hover {
+        background-color: #444444; /* Màu đen nhạt khi hover */
+        transform: scale(1.05);
+    }
+
+/* Hiệu ứng */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

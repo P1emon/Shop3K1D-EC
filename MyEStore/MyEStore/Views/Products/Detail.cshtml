@@ -1,0 +1,47 @@
+﻿@model MyEStore.Entities.HangHoa
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h1>@Model.TenHh</h1>
+
+<div>
+    <h4>HangHoaVM</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaHh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaHh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenHh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenHh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Hinh)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="~/Hinh/HangHoa/@Model.Hinh" alt="@Model.TenHh" class="hh-box-img" />
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DonGia)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DonGia)
+        </dd>
+    </dl>
+    
+    <form asp-action="AddToCart"
+          asp-controller="Cart"
+          asp-route-id="@Model.MaHh">
+        Số lượng mua:
+        <input type="number" name="qty" value="1" min="0" style="width:45px;" />
+        <button class="btn btn-primary">Mua</button>
+    </form>
+
+</div>

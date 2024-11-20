@@ -1,0 +1,74 @@
+﻿/* Navbar styles */
+.navbar {
+    background-color: #000; /* Đen */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #fff; /* Trắng */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .navbar-brand:hover {
+        color: #ddd; /* Trắng xám */
+    }
+
+.nav-link {
+    color: #fff; /* Trắng */
+    font-size: 1rem;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+    .nav-link:hover {
+        color: #ddd; /* Trắng xám */
+    }
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #ffffff; /* Trắng */
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    color: #333; /* Màu chữ */
+    padding: 10px 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .dropdown-item:hover {
+        background-color: #000; /* Nền đen khi hover */
+        color: #fff; /* Chữ trắng khi hover */
+    }
+
+/* Badge styles for cart count */
+#cart-count {
+    font-size: 0.9rem;
+    margin-left: 5px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    position: relative;
+    top: -1px;
+    background-color: #dc3545; /* Đỏ */
+    color: #fff; /* Trắng */
+}
+
+/* Footer styles */
+.footer {
+    background-color: #000; /* Đen */
+    color: #fff; /* Trắng */
+}
+
+    .footer a {
+        color: #ddd;
+        text-decoration: none;
+    }
+
+        .footer a:hover {
+            color: #fff;
+        }

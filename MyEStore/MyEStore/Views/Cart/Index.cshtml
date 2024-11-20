@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MyEStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Giỏ hàng</h1>
+
+<div class="cart-table table-responsive">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th class="pro-thumbnail">Thumbnail</th>
+				<th class="pro-title">Product</th>
+				<th class="pro-price">Price</th>
+				<th class="pro-quantity">Quantity</th>
+				<th class="pro-subtotal">Total</th>
+				<th class="pro-remove">Remove</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						<img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" height="100" />
+					</td>
+					<td>@item.TenHh</td>
+					<td>@item.DonGia</td>
+					<td>
+						<input value="@item.SoLuong" min="0" />
+					</td>
+					<td>@item.ThanhTien</td>
+					<td>
+						<a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-danger">Xóa</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+<a asp-action="Index" asp-controller="Payment" class="btn btn-success">Thanh toán</a>

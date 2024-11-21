@@ -3,7 +3,25 @@
 @{
     ViewData["Title"] = "Giỏ hàng";
 }
+<style>
+    /* Đảm bảo footer nằm cố định ở dưới cùng */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #343a40; /* Màu nền tối */
+        color: #fff; /* Màu chữ trắng */
+        font-weight: bold; /* Chữ đậm */
+        padding: 1rem 0; /* Khoảng cách padding */
+        z-index: 1000; /* Đảm bảo footer hiển thị phía trên các phần khác */
+    }
 
+    /* Tạo khoảng trống để footer không che nội dung */
+    .container {
+        padding-bottom: 100px; /* Khoảng cách dưới để tránh footer che khuất */
+    }
+
+</style>
 <div class="container py-5">
     <h1 class="text-center mb-4">Giỏ hàng của bạn</h1>
 
@@ -68,3 +86,7 @@
         </div>
     }
 </div>
+
+<footer class="footer text-center">
+    © 2024 MyEStore - All rights reserved.
+</footer>

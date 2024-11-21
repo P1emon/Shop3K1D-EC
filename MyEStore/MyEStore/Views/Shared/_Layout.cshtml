@@ -30,16 +30,10 @@
                                 Category
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1000">Đồng hồ</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1001">Laptop</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1002">Máy ảnh</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1003">Điện thoại</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1004">Nước hoa</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1005">Trang sức</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1006">Giày</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index" asp-route-cateid="1007">Vali</a></li>
+                                @await Component.InvokeAsync("Loai")
                             </ul>
                         </li>
+
                         <!-- Home Link -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Home</a>

@@ -1,2 +1,6 @@
-# ec21bitv02
-Demo Ecommerce lớp 21BITV02
+Nhóm 3K1D
+Thành viên:
+- Nguyễn Hoà Khang
+- Phan Nguyễn Đăng Khoa
+- Đỗ Hoàng Ka
+- Trương Minh Đức

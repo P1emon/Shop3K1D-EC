@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<MyEStore.Models.HangHoaVM>
 
 @{
-    ViewData["Title"] = "Danh sách hàng hóa";
+    ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
 }
 
 <!-- Kết nối file CSS -->
 <link rel="stylesheet" href="~/css/PHome.css" />
 
-<h1>Danh sách Hàng hóa</h1>
+<h1>@ViewData["Title"]</h1>
+
 <div class="container">
     @foreach (var hh in Model)
     {

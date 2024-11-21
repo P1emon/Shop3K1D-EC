@@ -26,11 +26,27 @@ namespace MyEStore.Controllers
         public IActionResult Index(int? cateid)
         {
             var data = _ctx.HangHoas.AsQueryable();
+
             if (cateid.HasValue)
             {
+                // Lọc theo MaLoai
                 data = data.Where(hh => hh.MaLoai == cateid.Value);
+
+                // Lấy tên loại tương ứng
+                var tenLoai = _ctx.Loais
+                    .Where(l => l.MaLoai == cateid.Value)
+                    .Select(l => l.TenLoai)
+                    .FirstOrDefault();
+
+                // Gán tên loại vào ViewData["Title"]
+                ViewData["Title"] = tenLoai ?? "Danh sách hàng hóa";
+            }
+            else
+            {
+                ViewData["Title"] = "Danh sách hàng hóa";
             }
 
+            // Chuẩn bị dữ liệu ViewModel
             var result = data.Select(hh => new HangHoaVM
             {
                 MaHh = hh.MaHh,
@@ -38,6 +54,7 @@ namespace MyEStore.Controllers
                 DonGia = hh.DonGia ?? 0,
                 Hinh = hh.Hinh
             });
+
             return View(result);
         }
     }

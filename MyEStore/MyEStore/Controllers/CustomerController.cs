@@ -34,24 +34,26 @@ namespace MyEStore.Controllers
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, kh.HoTen),
-                new Claim(ClaimTypes.Email, kh.Email),
-                new Claim("UserId", kh.MaKh),
-                //làm động lấy role trong DB
-                new Claim(ClaimTypes.Role, "Administrator")
-            };
+    {
+        new Claim(ClaimTypes.Name, kh.HoTen),
+        new Claim(ClaimTypes.Email, kh.Email),
+        new Claim("UserId", kh.MaKh),
+        // Làm động lấy role trong DB
+        new Claim(ClaimTypes.Role, "Administrator")
+    };
             var claimsIdentity = new ClaimsIdentity(
-            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(claimPrincipal);
-            if (!string.IsNullOrEmpty(ReturnUrl)){
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {
                 return Redirect(ReturnUrl);
             }
-            return RedirectToAction("Profile", "Customer");
+            return RedirectToAction("Index", "Cart"); 
         }
+
 
         [Authorize]
         public IActionResult PurchaseOrder()

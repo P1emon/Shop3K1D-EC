@@ -184,5 +184,57 @@ namespace MyEStore.Controllers
             TempData["Success"] = "Your profile has been updated successfully.";
             return RedirectToAction("Profile");
         }
+		// Hiển thị lịch sử giao dịch của khách hàng
+		[Authorize]
+		public IActionResult TransactionHistory()
+		{
+			var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+			if (userId == null)
+			{
+				return RedirectToAction("Login");
+			}
+
+			var orders = _ctx.HoaDons
+				.Where(hd => hd.MaKh == userId)
+				.OrderByDescending(hd => hd.NgayDat)
+				.ToList();
+
+			return View(orders);
+		}
+
+        // Hiển thị chi tiết hóa đơn và các sản phẩm đã mua
+        [Authorize]
+        public IActionResult OrderDetails(int id)
+        {
+            var order = _ctx.HoaDons
+                .Where(hd => hd.MaHd == id)
+                .Select(hd => new
+                {
+                    hd.MaHd,
+                    hd.NgayDat,
+                    hd.HoTen,
+                    hd.DiaChi,
+                    hd.CachThanhToan,
+                    hd.PhiVanChuyen,
+                    Products = hd.ChiTietHds.Select(ct => new
+                    {
+                        ct.MaHh,
+                        ct.SoLuong,
+                        ct.DonGia,
+                        ProductName = ct.MaHhNavigation.TenHh,
+                        Hinh = ct.MaHhNavigation.Hinh // Lấy thông tin hình ảnh từ bảng HangHoa
+                    }).ToList()
+                }).FirstOrDefault();
+
+            if (order == null)
+            {
+                return NotFound("Order not found.");
+            }
+
+            return View(order);
+        }
+
+
     }
 }

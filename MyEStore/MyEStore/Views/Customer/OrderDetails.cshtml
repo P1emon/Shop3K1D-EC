@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+<h2>Order Details (ID: @Model.MaHd)</h2>
+<p>Date: @Model.NgayDat.ToString("dd/MM/yyyy")</p>
+<p>Customer: @Model.HoTen</p>
+<p>Address: @Model.DiaChi</p>
+<p>Payment Method: @Model.CachThanhToan</p>
+
+<h3>Products</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+                <tr>
+                    <td>
+                         <img src="~/Hinh/HangHoa/@product.Hinh" alt="@product.ProductName" style="width: 100px; height: auto;" />
+                    </td>
+                    <td>@product.ProductName</td>
+                    <td>@product.SoLuong</td>
+                    <td>@product.DonGia</td>
+                    <td>@(product.SoLuong * product.DonGia)</td>
+                </tr>
+        }
+    </tbody>
+</table>

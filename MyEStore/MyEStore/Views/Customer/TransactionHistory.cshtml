@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MyEStore.Entities.HoaDon>
+
+<h2>Your Transaction History</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+                <tr>
+                    <td>@order.MaHd</td>
+                    <td>@order.NgayDat.ToString("dd/MM/yyyy")</td>
+                    <td>@order.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia)</td>
+                    
+                    <td>
+                        <a href="@Url.Action("OrderDetails", "Customer", new { id = order.MaHd })" class="btn btn-info">View Details</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

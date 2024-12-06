@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,5 +19,62 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.dropdown-menu {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .dropdown-item i {
+        font-size: 20px;
+        color: #007bff;
+        transition: color 0.3s;
+    }
+
+    .dropdown-item:hover {
+        background-color: #007bff;
+        color: #fff;
+        transform: translateX(5px);
+    }
+
+        .dropdown-item:hover i {
+            color: #fff;
+        }
+
+.dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    background-color: #ddd;
+    border: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 

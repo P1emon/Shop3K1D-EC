@@ -1,64 +1,107 @@
 ﻿@model MyEStore.Models.ProfileVM
 
-@{
-    ViewData["Title"] = "Your Profile";
-}
+<!-- Trigger Button (Hidden if automatically shown) -->
+<button type="button" class="btn btn-primary d-none" id="openProfileModal" data-bs-toggle="modal" data-bs-target="#profileModal"></button>
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
-    <div class="card shadow-lg border-0" style="width: 100%; max-width: 600px;">
-        <div class="card-body p-5">
-            <h2 class="text-center mb-4" style="color: #333;">Your Profile</h2>
+<!-- Profile Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <!-- Modal Header -->
+            <div class="modal-header bg-gradient text-white text-center">
+                <h5 class="modal-title fw-bold mx-auto" id="profileModalLabel">Update Your Profile</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-            @if (TempData["Success"] != null)
-            {
-                <div class="alert alert-success text-center">@TempData["Success"]</div>
-            }
+            <!-- Modal Body -->
+            <div class="modal-body p-5">
+                <form asp-action="Profile" method="post">
+                    <!-- Full Name -->
+                    <div class="mb-4">
+                        <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                        <input asp-for="FullName" class="form-control form-control-lg" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
 
-            <form asp-action="Profile" method="post">
-                <!-- Username (Read-only) -->
-                <div class="mb-4">
-                    <label asp-for="UserName" class="form-label fw-bold">Username</label>
-                    <input asp-for="UserName" class="form-control form-control-lg bg-light text-dark" readonly style="border: none; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);" />
-                </div>
+                    <!-- Email -->
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" type="email" class="form-control form-control-lg" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
 
-                <!-- Full Name -->
-                <div class="mb-4">
-                    <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
-                    <input asp-for="FullName" class="form-control form-control-lg" style="border: 1px solid #ddd; border-radius: 10px;" />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
-                </div>
+                    <!-- Current Password -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Current Password</label>
+                        <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Enter current password" required />
+                    </div>
 
-                <!-- Email -->
-                <div class="mb-4">
-                    <label asp-for="Email" class="form-label fw-bold">Email</label>
-                    <input asp-for="Email" type="email" class="form-control form-control-lg" style="border: 1px solid #ddd; border-radius: 10px;" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
+                    <!-- New Password -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">New Password</label>
+                        <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Enter new password" required />
+                    </div>
 
-                <!-- Phone -->
-                <div class="mb-4">
-                    <label asp-for="Phone" class="form-label fw-bold">Phone</label>
-                    <input asp-for="Phone" type="text" class="form-control form-control-lg" style="border: 1px solid #ddd; border-radius: 10px;" />
-                    <span asp-validation-for="Phone" class="text-danger"></span>
-                </div>
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Confirm Password</label>
+                        <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Confirm new password" required />
+                    </div>
 
-                <!-- Password -->
-                <div class="mb-4">
-                    <label asp-for="Password" class="form-label fw-bold">Password</label>
-                    <input asp-for="Password" type="password" class="form-control form-control-lg" style="border: 1px solid #ddd; border-radius: 10px;" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <!-- Save Changes Button -->
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-dark btn-lg rounded-pill">Save Changes</button>
-                </div>
-            </form>
+                    <!-- Save Changes Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.13/jquery.validate.unobtrusive.min.js"></script>
-}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("openProfileModal").click();
+    });
+</script>
+
+<style>
+    /* Header Gradient */
+    .modal-header.bg-gradient {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+
+    /* Modal Design */
+    .modal-content {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    /* Form Control Styling */
+    .form-control-lg {
+        border-radius: 10px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .form-control-lg:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+        }
+
+    /* Button Styling */
+    .btn-primary {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+        }
+
+    /* Modal Body Styling */
+    .modal-body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f9f9f9;
+        border-radius: 15px;
+        padding: 40px;
+    }
+</style>

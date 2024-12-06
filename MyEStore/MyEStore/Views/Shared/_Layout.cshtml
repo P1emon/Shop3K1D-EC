@@ -53,12 +53,43 @@
                         <!-- User Auth Links -->
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Chào <b>@User.Identity.Name</b></a>
+                            <!-- Profile Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Chào <b>@User.Identity.Name</b>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Profile">
+                                            <i class="bi bi-person-circle"></i> Cập nhật hồ sơ
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Order" asp-action="Index">
+                                            <i class="bi bi-bag-check"></i> Đơn hàng từng mua
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Addresses">
+                                            <i class="bi bi-geo-alt-fill"></i> Địa chỉ nhận hàng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Preferences">
+                                            <i class="bi bi-bell"></i> Thông báo
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-area="" asp-controller="Customer" asp-action="Logout">
+                                            <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+
+
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Logout">Đăng xuất</a>
-                            </li>
+
                         }
                         else
                         {
@@ -69,6 +100,7 @@
                                 <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Login">Đăng nhập</a>
                             </li>
                         }
+
                     </ul>
                 </div>
             </div>

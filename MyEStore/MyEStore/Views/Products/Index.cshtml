@@ -1,10 +1,18 @@
-﻿@model IEnumerable<MyEStore.Models.HangHoaVM>
+﻿@using MyEStore.Helpers
+@using MyEStore.Controllers
+@model IEnumerable<MyEStore.Models.HangHoaVM>
 
 @{
     ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
+    var siteUrl = ViewContext.HttpContext.Request.Scheme + "://" + ViewContext.HttpContext.Request.Host;
 }
 
-<!-- Kết nối file CSS -->
+<meta property="og:title" content="@ViewData["Title"]" />
+<meta property="og:description" content="Khám phá danh sách hàng hóa tại MyStore" />
+<meta property="og:image" content="@Url.Content("~/images/default-og-image.jpg")" />
+<meta property="og:url" content="@siteUrl" />
+<meta property="og:type" content="website" />
+
 <link rel="stylesheet" href="~/css/PHome.css" />
 
 <h1>@ViewData["Title"]</h1>
@@ -14,16 +22,26 @@
     {
         <div class="hh-box">
             <!-- Ảnh sản phẩm -->
-            <a asp-action="Detail" asp-route-id="@hh.MaHh">
-                <img src="~/Hinh/HangHoa/@hh.Hinh" alt="@hh.TenHh - hình ảnh sản phẩm" />
+            <a asp-action="Detail" asp-route-id="@hh.MaHh" asp-route-slug="@SlugHelper.GenerateSlug(hh.TenHh)">
+                <img src="~/Hinh/Hanghoa/@hh.Hinh" alt="@hh.TenHh - hình ảnh sản phẩm" />
             </a>
 
             <!-- Thông tin sản phẩm -->
             <div class="hh-box-content">
                 <div class="hh-box-title">@hh.TenHh</div>
-                <div class="hh-box-gia">@hh.DonGia $</div>
+                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N2") $</div>
                 <a class="hh-box-mua" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@hh.MaHh">Mua ngay</a>
+
+                <!-- Nút chia sẻ -->
+                <div class="social-share mt-3">
+                    <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                        <a class="a2a_button_facebook"></a>
+                        <a class="a2a_button_twitter"></a>
+                    </div>
+                </div>
             </div>
         </div>
     }
 </div>
+
+<script async src="https://static.addtoany.com/menu/page.js"></script>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyEStore.Entities;
+using System.Linq;
+using MyEStore.Helpers;
 using MyEStore.Models;
 
 namespace MyEStore.Controllers
@@ -13,13 +15,37 @@ namespace MyEStore.Controllers
             _ctx = ctx;
         }
 
-        public IActionResult Detail(int id)
+        // Tạo slug cho URL thân thiện
+        public IActionResult Detail(int id, string slug)
         {
             var hangHoa = _ctx.HangHoas.SingleOrDefault(p => p.MaHh == id);
             if (hangHoa == null)
             {
                 return NotFound();
             }
+
+            var loai = _ctx.Loais.SingleOrDefault(l => l.MaLoai == hangHoa.MaLoai);
+            if (loai == null)
+            {
+                return NotFound();
+            }
+
+            // Tạo slug mong đợi từ Loai và HangHoa
+            var expectedSlug = SlugHelper.GenerateSlug(loai.TenLoaiAlias + "/" + hangHoa.TenAlias);
+
+            // Kiểm tra slug trong URL và so sánh với expectedSlug
+            if (slug != expectedSlug)
+            {
+                return RedirectToActionPermanent("Detail", "Products", new { id = hangHoa.MaHh, slug = expectedSlug });
+            }
+
+            // Truyền slug qua ViewData
+            ViewData["ExpectedSlug"] = expectedSlug;
+
+            // Truyền dữ liệu hình ảnh
+            var imageUrl = "~/Hinh/HangHoa/" + hangHoa.Hinh;
+            ViewData["ImageUrl"] = imageUrl;
+
             return View(hangHoa);
         }
 

@@ -6,6 +6,8 @@ namespace MyEStore.Entities;
 
 public partial class MyeStoreContext : DbContext
 {
+    internal IEnumerable<object> HangHoa;
+
     public MyeStoreContext()
     {
     }

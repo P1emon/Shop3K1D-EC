@@ -1,18 +1,27 @@
 ﻿/* Tổng quan giao diện */
-.homepage-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ffffff; /* Màu nền trắng */
-    color: #000000; /* Văn bản màu đen */
-    font-family: 'Poppins', sans-serif; /* Phông chữ trẻ trung và hiện đại */
-    overflow: hidden; /* Ngăn các phần tử vượt khỏi màn hình */
-}
+
 
 /* Phần giới thiệu */
 .intro-section {
     text-align: center;
+    
+}
+
+.homepage-container {
+    display: flex;
+    flex-direction: column; /* Các phần tử xếp theo chiều dọc */
+    justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    height: 110vh; /* Chiều cao 110% màn hình */
+    background-color: #ffffff; /* Màu nền trắng */
+    color: #000000; /* Văn bản màu đen */
+    font-family: 'Poppins', sans-serif; /* Phông chữ trẻ trung và hiện đại */
+    overflow: hidden; /* Ngăn các phần tử vượt ra ngoài màn hình */
+}
+
+.intro-section {
+    text-align: center;
+    margin-top: 20vh; /* Khoảng cách từ trên cùng (20% chiều cao màn hình) */
 }
 
 .welcome-text {
@@ -31,7 +40,6 @@
     animation: slide-in 1s ease-out 0.5s forwards;
 }
 
-/* Nút bắt đầu mua sắm */
 .start-shopping-btn {
     display: inline-block;
     padding: 15px 30px;
@@ -46,10 +54,65 @@
     animation: bounce-in 1s ease-out 1s forwards;
 }
 
+
     .start-shopping-btn:hover {
         background-color: #333333; /* Màu tối hơn khi rê chuột */
         transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
     }
+
+/* Footer About Us Section */
+.about-us-section {
+    position: relative;
+    background-color: #f9f9f9;
+    padding: 50px 20px;
+    text-align: center;
+    transform: translateY(100px); /* Bắt đầu ở trạng thái "dưới màn hình" */
+    opacity: 0; /* Bắt đầu ẩn */
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+    .about-us-section.visible {
+        transform: translateY(0); /* Di chuyển lên vị trí ban đầu */
+        opacity: 1; /* Hiển thị */
+    }
+
+    .about-us-section h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+.about-us-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Cho phép các mục tự động xuống hàng */
+}
+
+.about-us-item {
+    text-align: center;
+    width: 150px;
+}
+
+.about-us-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+    .about-us-icon:hover {
+        transform: scale(1.1); /* Hiệu ứng khi hover */
+    }
+
+.about-us-caption {
+    font-size: 1rem;
+    color: #555;
+}
+
 
 /* Hiệu ứng Fade-in */
 @keyframes fade-in {

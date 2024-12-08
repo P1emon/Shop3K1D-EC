@@ -3,11 +3,44 @@
 }
 
 <link rel="stylesheet" href="~/css/Home.css" />
-
 <div class="homepage-container">
     <div class="intro-section">
         <h1 class="welcome-text">Welcome to Our Shop</h1>
         <p class="subtitle">Discover amazing products that fit your lifestyle</p>
         <a href="~/Products" class="start-shopping-btn">Start Shopping</a>
     </div>
+
+        <footer class="about-us-section hidden">
+        <h2>About Us</h2>
+        <div class="about-us-container">
+            <div class="about-us-item">
+                <img src="~/Hinh/Others/khang.jpg" alt="Icon 1" class="about-us-icon" />
+                <p class="about-us-caption">Nguyễn Hòa Khang</p>
+            </div>
+            <div class="about-us-item">
+                <img src="~/Hinh/Others/ka.jpg" alt="Icon 2" class="about-us-icon" />
+                <p class="about-us-caption">Đỗ Hoàng Ka</p>
+            </div>
+            <div class="about-us-item">
+                <img src="~/Hinh/Others/khoa.jpg" alt="Icon 3" class="about-us-icon" />
+                <p class="about-us-caption">Phan Nguyễn Đăng Khoa</p>
+            </div>
+            <div class="about-us-item">
+                <img src="~/Hinh/Others/duc.jpg" alt="Icon 4" class="about-us-icon" />
+                <p class="about-us-caption">Trường Minh Đức</p>
+            </div>
+        </div>
+    </footer>
 </div>
+<script>
+    document.addEventListener("scroll", () => {
+        const aboutUsSection = document.querySelector(".about-us-section");
+        const windowHeight = window.innerHeight;
+        const sectionTop = aboutUsSection.getBoundingClientRect().top;
+
+        // Khi phần tử cách đỉnh màn hình dưới 50%, thêm class 'visible'
+        if (sectionTop < windowHeight * 0.5) {
+            aboutUsSection.classList.add("visible");
+        }
+    });
+</script>

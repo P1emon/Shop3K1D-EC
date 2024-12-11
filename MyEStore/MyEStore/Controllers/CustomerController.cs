@@ -17,12 +17,14 @@ namespace MyEStore.Controllers
         }
 
         [HttpGet]
+        [Route("/Login")]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("/Login")]
         public async Task<IActionResult> Login(LoginVM model, string? ReturnUrl)
         {
             ViewBag.ReturnUrl = ReturnUrl;
@@ -72,13 +74,13 @@ namespace MyEStore.Controllers
         {
             return View();
         }
-
+        [Route("/Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             return Redirect("/");
         }
-
+        [Route("/Register")]
         // GET: Register
         [HttpGet]
         public IActionResult Register()
@@ -87,6 +89,7 @@ namespace MyEStore.Controllers
         }
 
         // POST: Register
+        [Route("/Register")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterVM model)
@@ -119,6 +122,7 @@ namespace MyEStore.Controllers
             TempData["ThongBao"] = "Account successfully created! Please log in.";
             return RedirectToAction("Login");
         }
+        [Route("/Profile")]
         // GET: Profile
         [HttpGet]
         public IActionResult Profile()
@@ -152,6 +156,7 @@ namespace MyEStore.Controllers
         // POST: Update Profile
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/Profile")]
         public IActionResult Profile(ProfileVM model)
         {
             if (!ModelState.IsValid)
@@ -186,7 +191,8 @@ namespace MyEStore.Controllers
         }
 		// Hiển thị lịch sử giao dịch của khách hàng
 		[Authorize]
-		public IActionResult TransactionHistory()
+        [Route("/TransactionHistory")]
+        public IActionResult TransactionHistory()
 		{
 			var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
@@ -205,6 +211,7 @@ namespace MyEStore.Controllers
 
         // Hiển thị chi tiết hóa đơn và các sản phẩm đã mua
         [Authorize]
+        [Route("/OrderDetails/{id}")]
         public IActionResult OrderDetails(int id)
         {
             var order = _ctx.HoaDons

@@ -1,7 +1,7 @@
 ﻿@using MyEStore.Helpers
 @using MyEStore.Controllers
 @model IEnumerable<MyEStore.Models.HangHoaVM>
-
+@Html.Partial("livechat") 
 @{
     ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
     var siteUrl = ViewContext.HttpContext.Request.Scheme + "://" + ViewContext.HttpContext.Request.Host;

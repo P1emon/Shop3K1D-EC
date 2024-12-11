@@ -31,7 +31,7 @@ namespace MyEStore.Controllers
             }
 
             // Tạo slug mong đợi từ Loai và HangHoa
-            var expectedSlug = SlugHelper.GenerateSlug(loai.TenLoaiAlias + "/" + hangHoa.TenAlias);
+            var expectedSlug = SlugHelper.GenerateSlug(loai.TenLoaiAlias + "/-" + hangHoa.TenAlias);
 
             // Kiểm tra slug trong URL và so sánh với expectedSlug
             if (slug != expectedSlug)

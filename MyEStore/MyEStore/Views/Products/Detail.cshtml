@@ -1,16 +1,17 @@
 ﻿@using MyEStore.Helpers
 @model MyEStore.Entities.HangHoa
-
+@Html.Partial("livechat") 
 @{
     var expectedSlug = ViewData["ExpectedSlug"] as string;
     var imageUrl = ViewData["ImageUrl"] as string;
 }
 
-<meta property="og:title" content="@Model.TenHh" />
-<meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N2") $" />
-<meta property="og:image" content="@imageUrl" />
-<meta property="og:url" content="@Url.Action("Detail", "Products", new { slug = expectedSlug })" />
-<meta property="og:type" content="product" />
+ <!-- Thẻ Open Graph -->
+    <meta property="og:title" content="@Model.TenHh" />
+    <meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N2") $" />
+    <meta property="og:image" content="@Url.Content(ViewData["ImageUrl"] as string)" />
+    <meta property="og:url" content="@Url.Action("Detail", "Products", new { slug = ViewData["ExpectedSlug"] })" />
+    <meta property="og:type" content="product" />
 
 <link rel="stylesheet" href="~/css/PDetail.css" />
 
@@ -49,6 +50,7 @@
                             <a class="a2a_button_facebook"></a>
                             <a class="a2a_button_twitter"></a>
                             <a class="a2a_button_pinterest"></a>
+                            <a class="a2a_button_whatsapp"></a>
                         </div>
                     </div>
                 </div>

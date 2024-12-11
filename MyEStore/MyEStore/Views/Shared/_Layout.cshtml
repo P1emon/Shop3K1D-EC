@@ -118,6 +118,33 @@
             @RenderBody()
         </main>
     </div>
+    <!-- Chat Button -->
+
+<button class="chat-button" id="chatButton">
+    <i class="bi bi-chat-dots"></i>
+</button>
+
+<div class="chatbox" id="chatBox">
+    <div class="chatbox-header">
+        Live Chat
+        <button id="closeChatButton" class="close-button">&times;</button>
+    </div>
+    <div class="chatbox-suggestions" id="chatSuggestions">
+        <span>Suggestions:</span>
+        <button class="suggestion-btn" data-question="How to buy">How to buy</button>
+        <button class="suggestion-btn" data-question="What is your return policy?">Return policy</button>
+        <button class="suggestion-btn" data-question="How long does delivery take?">Delivery time</button>
+        <button class="suggestion-btn" data-question="Do you offer discounts?">Discounts</button>
+        <button class="suggestion-btn" data-question="What payment methods are accepted?">Payment methods</button>
+    </div>
+    <div class="chatbox-messages" id="chatMessages">
+        <!-- Chat messages will appear here -->
+    </div>
+    <div class="chatbox-input">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="sendButton">Send</button>
+    </div>
+</div>
 
     <!-- Footer -->
     <footer class="border-top footer text-muted bg-dark text-white mt-4">
@@ -126,6 +153,112 @@
         </div>
     </footer>
 
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const chatButton = document.getElementById('chatButton');
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const sendButton = document.getElementById('sendButton');
+    const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+    const closeChatButton = document.getElementById('closeChatButton');
+    // Toggle chat box visibility
+    chatButton.addEventListener('click', () => {
+        if (chatBox.style.display === 'flex') {
+            chatBox.style.display = 'none'; // Hide chat box if visible
+        } else {
+            chatBox.style.display = 'flex'; // Show chat box if hidden
+            initializeChat(); // Clear previous messages and send "Hello"
+        }
+    });
+
+    // Initialize chat with a welcome message
+    function initializeChat() {
+        chatMessages.innerHTML = ''; // Clear all previous messages
+        addMessage('Bot', 'Hello! How can I assist you today?'); // Send welcome message
+    }
+
+    // Add event listener for suggestion buttons
+    suggestionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const question = button.getAttribute('data-question');
+            chatInput.value = question;
+            sendButton.click(); // Simulate sending the message
+        });
+    });
+
+    // Send a message when the 'Send' button is clicked
+    sendButton.addEventListener('click', () => {
+        const userMessage = chatInput.value.trim();
+        if (userMessage) {
+            addMessage('You', userMessage); // Show user message
+            chatInput.value = ''; // Clear input field
+            botReply(userMessage); // Generate bot's reply
+        }
+    });
+
+    // Add message to chat box
+function addMessage(sender, message) {
+    const messageDiv = document.createElement('div');
+    const messageContent = document.createElement('span');
+    messageContent.textContent = message;
+
+    // Check if the sender is the bot or the user
+    if (sender === 'Bot') {
+        messageDiv.classList.add('bot-message');
+    } else {
+        messageDiv.classList.add('user-message');
+    }
+
+    messageDiv.appendChild(messageContent);
+    chatMessages.appendChild(messageDiv);
+
+    // Scroll to the bottom of the chat
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+// Close the chat box when the close button is clicked
+            closeChatButton.addEventListener('click', function () {
+                chatBox.style.display = 'none'; // Hide the chat box
+            });
+
+    // Enhanced bot reply logic
+    function botReply(userMessage) {
+        let reply;
+
+        const lowerMessage = userMessage.toLowerCase();
+
+        if (lowerMessage.includes('hello')) {
+            reply = 'Hi there! How can I assist you today?';
+        } else if (lowerMessage.includes('how to buy')) {
+            reply = `Here are the steps to buy: \n 1. Login \n 2. Choose the product \n 3. Go to cart and click checkout \n 4. Log in to PayPal and pay.`;
+        } else if (lowerMessage.includes('return') || lowerMessage.includes('refund')) {
+            reply = 'To request a refund, please visit your order history and select the item to initiate a return.';
+        } else if (lowerMessage.includes('delivery') || lowerMessage.includes('shipping')) {
+            reply = 'We offer free shipping on orders over $50. Delivery typically takes 3-5 business days.';
+        } else if (lowerMessage.includes('payment')) {
+            reply = 'We only accept PayPal.';
+        } else if (lowerMessage.includes('discount') || lowerMessage.includes('promo code')) {
+            reply = 'Check out our homepage for the latest discounts and promo codes!';
+        } else {
+            reply = 'Sorry, I didn\'t understand that. Can you rephrase or ask about "how to buy", "return policy", or "shipping"?';
+        }
+
+        addMessage('Bot', reply);
+    }
+
+    // Send message when Enter key is pressed
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+});
+
+</script>
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,28 +1,98 @@
 ﻿@model IEnumerable<MyEStore.Entities.HoaDon>
+@Html.Partial("livechat") 
 
-<h2>Your Transaction History</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-                <tr>
-                    <td>@order.MaHd</td>
-                    <td>@order.NgayDat.ToString("dd/MM/yyyy")</td>
-                    <td>@order.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia)</td>
-                    
-                    <td>
-                        <a href="@Url.Action("OrderDetails", "Customer", new { id = order.MaHd })" class="btn btn-info">View Details</a>
-                    </td>
-                </tr>
-        }
-    </tbody>
-</table>
+<h2 class="page-title">Your Transaction History</h2>
+
+<div class="table-container">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                    <tr>
+                        <td>@order.MaHd</td>
+                        <td>@order.NgayDat.ToString("dd/MM/yyyy")</td>
+                        <td>@order.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia).ToString("C")</td>
+                        <td>
+                            <span class="badge badge-success">Completed</span> <!-- Bạn có thể thay đổi trạng thái tùy vào dữ liệu thực tế -->
+                        </td>
+                        <td>
+                            <a href="@Url.Action("OrderDetails", "Customer", new { id = order.MaHd })" class="btn btn-info btn-sm">View Details</a>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Căn giữa trang */
+    .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Đảm bảo container chiếm ít nhất toàn bộ chiều cao màn hình */
+        margin: 0;
+    }
+
+    .page-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    table {
+        width: 80%; /* Cung cấp một kích thước cố định cho bảng */
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f9;
+        color: #555;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    .btn-info {
+        padding: 5px 15px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    .btn-info:hover {
+        background-color: #17a2b8;
+        color: white;
+    }
+</style>

@@ -57,14 +57,14 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "product-detail",
-    pattern: "{tenLoaiAlias}/{tenAlias}",
-    defaults: new { controller = "Products", action = "Detail" });
+
 
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+app.MapControllerRoute(
+    name: "product-detail",
+    pattern: "{tenLoaiAlias}/{tenAlias}",
+    defaults: new { controller = "Products", action = "Detail" });
 app.Run();

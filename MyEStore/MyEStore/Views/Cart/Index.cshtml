@@ -3,90 +3,122 @@
 @{
     ViewData["Title"] = "Giỏ hàng";
 }
+
 <style>
     /* Đảm bảo footer nằm cố định ở dưới cùng */
     .footer {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background-color: #343a40; /* Màu nền tối */
-        color: #fff; /* Màu chữ trắng */
-        font-weight: bold; /* Chữ đậm */
-        padding: 1rem 0; /* Khoảng cách padding */
-        z-index: 1000; /* Đảm bảo footer hiển thị phía trên các phần khác */
+        background-color: #343a40;
+        color: #fff;
+        font-weight: bold;
+        padding: 1rem 0;
+        z-index: 1000;
     }
 
-    /* Tạo khoảng trống để footer không che nội dung */
     .container {
         padding-bottom: 100px; /* Khoảng cách dưới để tránh footer che khuất */
     }
 
 </style>
+
 <div class="container py-5">
     <h1 class="text-center mb-4">Giỏ hàng của bạn</h1>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info text-center" role="alert">
-            <i class="bi bi-cart-x fs-1"></i>
-            <p class="mt-3">Giỏ hàng của bạn đang trống.</p>
-            <a href="/" class="btn btn-primary mt-3">
-                <i class="bi bi-shop"></i> Tiếp tục mua sắm
-            </a>
-        </div>
+            <div class="alert alert-info text-center" role="alert">
+                <i class="bi bi-cart-x fs-1"></i>
+                <p class="mt-3">Giỏ hàng của bạn đang trống.</p>
+                <a href="/" class="btn btn-primary mt-3">
+                    <i class="bi bi-shop"></i> Tiếp tục mua sắm
+                </a>
+            </div>
     }
     else
     {
-        <div class="table-responsive shadow-sm">
-            <table class="table table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col" class="text-center">Hình ảnh</th>
-                        <th scope="col">Sản phẩm</th>
-                        <th scope="col" class="text-end">Đơn giá</th>
-                        <th scope="col" class="text-center">Số lượng</th>
-                        <th scope="col" class="text-end">Thành tiền</th>
-                        <th scope="col" class="text-center">Xóa</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="table-responsive shadow-sm">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" class="text-center">Hình ảnh</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col" class="text-end">Đơn giá</th>
+                            <th scope="col" class="text-center">Số lượng</th>
+                            <th scope="col" class="text-end">Thành tiền</th>
+                            <th scope="col" class="text-center">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items">
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td class="text-center">
-                                <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="max-height: 80px;" />
-                            </td>
-                            <td>@item.TenHh</td>
-                            <td class="text-end">@item.DonGia.ToString("C")</td>
-                            <td class="text-center">
-                                <input type="number" value="@item.SoLuong" min="1" class="form-control text-center" style="max-width: 70px;" />
-                            </td>
-                            <td class="text-end">@item.ThanhTien.ToString("C")</td>
-                            <td class="text-center">
-                                <a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
+                                <tr data-id="@item.MaHh">
+                                    <td class="text-center">
+                                        <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="max-height: 80px;" />
+                                    </td>
+                                    <td>@item.TenHh</td>
+                                    <td class="text-end">@item.DonGia.ToString("C")</td>
+                                    <td class="text-center">
+                                        <input type="number" value="@item.SoLuong" min="1" class="form-control text-center quantity" style="max-width: 70px;" data-id="@item.MaHh" />
+                                    </td>
+                                    <td class="text-end total-price" data-id="@item.MaHh">@item.ThanhTien.ToString("C")</td>
+                                    <td class="text-center">
+                                        <a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                     }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
-                        <td class="text-end fw-bold">@Model.Sum(item => item.ThanhTien).ToString("C")</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="text-end mt-4">
-            <a asp-action="Index" asp-controller="Payment" class="btn btn-success btn-lg">
-                <i class="bi bi-credit-card"></i> Thanh toán
-            </a>
-        </div>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
+                            <td class="text-end fw-bold" id="total-price">@Model.Sum(item => item.ThanhTien).ToString("C")</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="text-end mt-4">
+                <a asp-action="Index" asp-controller="Payment" class="btn btn-success btn-lg">
+                    <i class="bi bi-credit-card"></i> Thanh toán
+                </a>
+            </div>
     }
 </div>
 
 <footer class="footer text-center">
     © 2024 MyEStore - All rights reserved.
 </footer>
+
+<script>
+    // Handle quantity change and update total price via AJAX
+    document.querySelectorAll('.quantity').forEach(input => {
+        input.addEventListener('change', function() {
+            var itemId = this.getAttribute('data-id');
+            var newQuantity = parseInt(this.value);
+
+            if (newQuantity < 1) return;
+
+            // Update the cart with the new quantity using AJAX
+            fetch('/Cart/UpdateQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: itemId, qty: newQuantity })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the total price for this item
+                const totalPriceElement = document.querySelector(`.total-price[data-id='${itemId}']`);
+                totalPriceElement.innerText = data.newItemTotalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+                // Update the total price of the cart
+                const cartTotalElement = document.getElementById('total-price');
+                cartTotalElement.innerText = data.cartTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+            });
+        });
+    });
+</script>

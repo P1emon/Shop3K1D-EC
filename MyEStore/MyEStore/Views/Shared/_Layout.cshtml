@@ -49,11 +49,7 @@
                                 <span class="badge bg-danger" id="cart-count">0</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="TransactionHistory">
-                                <i class="bi bi-cart"></i> Lịch sử
-                            </a>
-                        </li>
+                     
                         <!-- User Auth Links -->
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -69,7 +65,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" asp-area="" asp-controller="Order" asp-action="Index">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="TransactionHistory">
                                                 <i class="bi bi-bag-check"></i> Đơn hàng từng mua
                                             </a>
                                         </li>

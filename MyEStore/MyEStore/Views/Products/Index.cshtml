@@ -14,6 +14,97 @@
 <meta property="og:type" content="website" />
 
 <link rel="stylesheet" href="~/css/PHome.css" />
+<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<div id="promotion-icon-container" style="position: fixed; bottom: 100px; right: 20px; z-index: 1000;">
+    <button id="promotion-icon" title="Nhấn để nhận mã khuyến mãi" style="background-color: #ff6f61; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-size: 30px; cursor: pointer;">
+        ⭐
+    </button>
+
+</div>
+
+<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
+<div id="mc_embed_shell" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+    <div id="mc_embed_signup" style="background: #f7f7f7; clear: left; font: 14px Helvetica, Arial, sans-serif; width: 600px; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <form action="https://gmail.us13.list-manage.com/subscribe/post?u=9efdcf641b7a583b9b92e27e4&amp;id=90f72358a9&amp;f_id=00424ae1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+            <div id="mc_embed_signup_scroll">
+                <h2>Đăng ký nhận mã khuyến mãi</h2>
+               
+                <div class="mc-field-group">
+                    <label for="mce-EMAIL">Email của bạn <span class="asterisk">*</span></label>
+                    <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Nhập email của bạn">
+                </div>
+                <div id="mce-responses" class="clear foot">
+                    <div class="response" id="mce-error-response" style="display: none;"></div>
+                    <div class="response" id="mce-success-response" style="display: none;"></div>
+                </div>
+                <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                    <input type="text" name="b_9efdcf641b7a583b9b92e27e4_90f72358a9" tabindex="-1" value="">
+                </div>
+                <div class="optionalParent">
+                    <div class="clear foot">
+                        <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Nhận mã khuyến mãi">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <button class="close-btn" onclick="togglePopup()" style="margin-top: 10px; background-color: #ff4c3b; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Đóng</button>
+    </div>
+</div>
+
+<script>
+    function togglePopup() {
+        const embedShell = document.getElementById('mc_embed_shell');
+        const overlay = document.getElementById('overlay');
+        const isHidden = embedShell.style.display === 'none' || embedShell.style.display === '';
+        embedShell.style.display = isHidden ? 'block' : 'none';
+        overlay.style.display = isHidden ? 'block' : 'none';
+    }
+
+    document.getElementById('promotion-icon').addEventListener('click', () => {
+        togglePopup();
+    });
+
+    // Ngừng việc chuyển hướng đến trang Mailchimp
+    document.getElementById('mc-embedded-subscribe-form').addEventListener('submit', (event) => {
+        event.preventDefault(); // Ngừng việc gửi form mặc định
+        showThankYouPopup();  // Hiển thị popup cảm ơn
+        // Sử dụng Fetch API hoặc Ajax để gửi dữ liệu form đi mà không reload/trang chuyển hướng
+        submitFormData();  // Giới thiệu về cách gọi Mailchimp API (hoặc của bạn) từ đây
+    });
+
+    function showThankYouPopup() {
+        alert('Cảm ơn bạn đã đăng ký! Mã khuyến mãi sẽ được gửi đến email của bạn sớm nhất.');
+        togglePopup(); // Đóng popup sau khi gửi
+    }
+
+    function submitFormData() {
+        const email = document.getElementById('mce-EMAIL').value;
+
+        // Đơn giản dùng Fetch để gửi dữ liệu POST đi thay vì form submit
+        fetch('https://gmail.us13.list-manage.com/subscribe/post?u=9efdcf641b7a583b9b92e27e4&id=90f72358a9', {
+            method: 'POST',
+            body: new URLSearchParams({
+                'EMAIL': email,
+                'b_9efdcf641b7a583b9b92e27e4_90f72358a9': '',  // Thông tin này phải khớp với cấu hình Mailchimp
+            }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then(response => response.json())  // Bạn có thể sử dụng json() tùy vào API của Mailchimp trả về gì
+            .then(data => console.log('Data sent successfully:', data))
+            .catch(error => console.error('Error sending data:', error));
+    }
+
+    document.getElementById('overlay').addEventListener('click', togglePopup);
+    src = "https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    src = "https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();  // Kích hoạt tooltip cho các phần tử có data-toggle="tooltip"
+    });
+</script>
+
 
 <h1>@ViewData["Title"]</h1>
 
@@ -45,3 +136,5 @@
 </div>
 
 <script async src="https://static.addtoany.com/menu/page.js"></script>
+
+

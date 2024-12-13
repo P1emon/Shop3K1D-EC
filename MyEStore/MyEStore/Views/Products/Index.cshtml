@@ -15,7 +15,7 @@
 
 <link rel="stylesheet" href="~/css/PHome.css" />
 <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
-<div id="promotion-icon-container" style="position: fixed; bottom: 100px; right: 20px; z-index: 1000;">
+<div id="promotion-icon-container" style="position: fixed; bottom: 150px; right: 20px; z-index: 1000;">
     <button id="promotion-icon" title="Nhấn để nhận mã khuyến mãi" style="background-color: #ff6f61; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-size: 30px; cursor: pointer;">
         ⭐
     </button>
@@ -120,7 +120,7 @@
             <!-- Thông tin sản phẩm -->
             <div class="hh-box-content">
                 <div class="hh-box-title">@hh.TenHh</div>
-                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N2") $</div>
+                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N0") đ</div>
                 <a class="hh-box-mua" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@hh.MaHh">Mua ngay</a>
 
                 <!-- Nút chia sẻ -->

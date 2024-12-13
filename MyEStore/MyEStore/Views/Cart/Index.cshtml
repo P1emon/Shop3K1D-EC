@@ -58,11 +58,11 @@
                                         <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="max-height: 80px;" />
                                     </td>
                                     <td>@item.TenHh</td>
-                                    <td class="text-end">@item.DonGia.ToString("C")</td>
+                                    <td class="text-end">@item.DonGia.ToString("N0") đ</td>
                                     <td class="text-center">
                                         <input type="number" value="@item.SoLuong" min="1" class="form-control text-center quantity" style="max-width: 70px;" data-id="@item.MaHh" />
                                     </td>
-                                    <td class="text-end total-price" data-id="@item.MaHh">@item.ThanhTien.ToString("C")</td>
+                                    <td class="text-end total-price" data-id="@item.MaHh">@item.ThanhTien.ToString("N0") đ</td>
                                     <td class="text-center">
                                         <a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
@@ -74,7 +74,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
-                            <td class="text-end fw-bold" id="total-price">@Model.Sum(item => item.ThanhTien).ToString("C")</td>
+                            <td class="text-end fw-bold" id="total-price">@Model.Sum(item => item.ThanhTien).ToString("N0") đ</td>
                             <td></td>
                         </tr>
                     </tfoot>

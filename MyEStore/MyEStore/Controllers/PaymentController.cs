@@ -18,6 +18,7 @@ namespace MyEStore.Controllers
 		{
 			_paypalClient = paypalClient;
 			_ctx = ctx;
+
 		}
 
 		public IActionResult Index()
@@ -41,31 +42,41 @@ namespace MyEStore.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> PaypalOrder(CancellationToken cancellationToken)
-		{
-			// Tạo đơn hàng (thông tin lấy từ Session???)
-			var tongTien = CartItems.Sum(p => p.ThanhTien).ToString();
-			var donViTienTe = "USD";
-			// OrderId - mã tham chiếu (duy nhất)
-			var orderIdref = "DH" + DateTime.Now.Ticks.ToString();
+        [HttpPost]
+        public async Task<IActionResult> PaypalOrder(CancellationToken cancellationToken)
+        {
+            // Tính tổng tiền bằng VND
+            var tongTienVND = CartItems.Sum(p => p.ThanhTien);
 
-			try
-			{
-				// a. Create paypal order
-				var response = await _paypalClient.CreateOrder(tongTien, donViTienTe, orderIdref);
+            // Chuyển đổi VND sang USD
+            const decimal conversionRate = 25400; // 1 USD = 25,000 VND
+            var tongTienUSD = tongTienVND / (double)conversionRate;
 
-				return Ok(response);
-			}
-			catch (Exception e)
-			{
-				var error = new
-				{
-					e.GetBaseException().Message
-				};
+            // Đảm bảo số tiền có 2 chữ số thập phân
+            var tongTien = tongTienUSD.ToString("F2");
 
-				return BadRequest(error);
-			}
-		}
+            var donViTienTe = "USD";
+            // OrderId - mã tham chiếu (duy nhất)
+            var orderIdref = "DH" + DateTime.Now.Ticks.ToString();
+
+            try
+            {
+                // a. Create paypal order
+                var response = await _paypalClient.CreateOrder(tongTien, donViTienTe, orderIdref);
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
+        }
+
 
         public async Task<IActionResult> PaypalCapture(string orderId, CancellationToken cancellationToken)
         {

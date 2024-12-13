@@ -25,9 +25,9 @@
                             <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="width: 80px; height: auto;">
                         </td>
                         <td class="fw-semibold" style="color: #333;">@item.TenHh</td>
-                        <td class="text-success fw-bold">@item.DonGia.ToString("#,##0.00") $</td>
+                        <td class="text-success fw-bold">@item.DonGia.ToString("#,##0.00") đ</td>
                         <td>@item.SoLuong</td>
-                        <td class="text-danger fw-bold">@item.ThanhTien.ToString("#,##0.00") $</td>
+                        <td class="text-danger fw-bold">@item.ThanhTien.ToString("#,##0.00") đ</td>
                     </tr>
                 }
             </tbody>
@@ -35,7 +35,7 @@
         <div class="text-end mt-4">
             <h3 class="fw-bold">
                 Total:
-                <span class="text-danger">@Model.Sum(p => p.ThanhTien).ToString("#,##0.00") $</span>
+                <span class="text-danger">@Model.Sum(p => p.ThanhTien).ToString("#,##0.00") đ</span>
             </h3>
         </div>
     </div>

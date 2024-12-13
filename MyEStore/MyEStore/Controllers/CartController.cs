@@ -80,6 +80,33 @@ namespace MyEStore.Controllers
             }
 			return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult UpdateQuantity([FromBody] UpdateQuantityRequest request)
+        {
+            var cart = CartItems;
+            var cartItem = cart.SingleOrDefault(p => p.MaHh == request.Id);
+
+            if (cartItem != null)
+            {
+                cartItem.SoLuong = request.Qty; // Update the quantity
+                HttpContext.Session.Set(CART_KEY, cart);
+            }
+
+            var itemTotalPrice = cartItem?.ThanhTien ?? 0;
+            var cartTotal = cart.Sum(item => item.ThanhTien);
+
+            return Json(new
+            {
+                newItemTotalPrice = itemTotalPrice,
+                cartTotal = cartTotal
+            });
+        }
+
+        public class UpdateQuantityRequest
+        {
+            public int Id { get; set; }
+            public int Qty { get; set; }
+        }
 
     }
 }

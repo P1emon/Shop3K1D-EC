@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyEStore.Entities;
 using MyEStore.Models;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyEStore.Controllers
 {
@@ -184,24 +185,25 @@ namespace MyEStore.Controllers
             TempData["Success"] = "Your profile has been updated successfully.";
             return RedirectToAction("Profile");
         }
-		// Hiển thị lịch sử giao dịch của khách hàng
-		[Authorize]
-		public IActionResult TransactionHistory()
-		{
-			var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+        // Hiển thị lịch sử giao dịch của khách hàng
+        public IActionResult TransactionHistory()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
-			if (userId == null)
-			{
-				return RedirectToAction("Login");
-			}
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
 
-			var orders = _ctx.HoaDons
-				.Where(hd => hd.MaKh == userId)
-				.OrderByDescending(hd => hd.NgayDat)
-				.ToList();
+            var orders = _ctx.HoaDons
+                .Where(hd => hd.MaKh == userId)
+                .Include(hd => hd.ChiTietHds) // Đảm bảo bạn đang nạp ChiTietHds cùng với HoaDons
+                .OrderByDescending(hd => hd.NgayDat)
+                .ToList();
 
-			return View(orders);
-		}
+            return View(orders);
+        }
+
 
         // Hiển thị chi tiết hóa đơn và các sản phẩm đã mua
         [Authorize]

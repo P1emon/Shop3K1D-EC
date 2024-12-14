@@ -17,10 +17,12 @@
         <tbody>
             @foreach (var order in Model)
             {
+                var totalAmount = order.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia); // Tính tổng tiền
                     <tr>
                         <td>@order.MaHd</td>
                         <td>@order.NgayDat.ToString("dd/MM/yyyy")</td>
-                        <td>@order.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia).ToString("C")</td>
+                           <td>@totalAmount.ToString("F0") đ</td> <!-- Hiển thị tổng tiền dưới dạng số thực với 2 chữ số thập phân -->
+
                         <td>
                             <span class="badge badge-success">Completed</span> <!-- Bạn có thể thay đổi trạng thái tùy vào dữ liệu thực tế -->
                         </td>

@@ -8,7 +8,7 @@
 
  <!-- Thẻ Open Graph -->
     <meta property="og:title" content="@Model.TenHh" />
-    <meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N2") $" />
+    <meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N0") đ" />
     <meta property="og:image" content="@Url.Content(ViewData["ImageUrl"] as string)" />
     <meta property="og:url" content="@Url.Action("Detail", "Products", new { slug = ViewData["ExpectedSlug"] })" />
     <meta property="og:type" content="product" />
@@ -28,11 +28,11 @@
                 <div class="card-body">
                     <h1 class="card-title fw-bold mb-3">@Model.TenHh</h1>
                     <h2 class="text-danger fw-bold mb-4">
-                        @Decimal.Parse(@Model.DonGia.ToString()).ToString("N2") $
+                        @Decimal.Parse(@Model.DonGia.ToString()).ToString("N0") đ
                     </h2>
 
                     <p class="card-text text-muted">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.
+                        @Model.MoTa
                     </p>
 
                     <!-- Add to Cart Form -->

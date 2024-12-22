@@ -1,7 +1,7 @@
 ﻿@using MyEStore.Helpers
 @using MyEStore.Controllers
 @model IEnumerable<MyEStore.Models.HangHoaVM>
-@Html.Partial("livechat") 
+@Html.Partial("livechat")
 @{
     ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
     var siteUrl = ViewContext.HttpContext.Request.Scheme + "://" + ViewContext.HttpContext.Request.Host;
@@ -42,188 +42,188 @@
         }
 
 
-            #slide-bar h2 {
-                font-size: 30px;
-                font-weight: 800;
-                color: #ffffff;
-                text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
-                margin-bottom: 20px;
-                border-bottom: 3px solid #4ac1ff;
-                padding-bottom: 10px;
-            }
-
-            #slide-bar .indicates-required {
-                font-size: 14px;
-                color: #f0f8ff;
-            }
-
-            #slide-bar .mc-field-group label {
-                font-size: 16px;
-                color: #ffffff;
-            }
-
-            #slide-bar input[type="email"] {
-                padding: 14px 20px;
-                border: 1px solid #3a87bd;
-                border-radius: 10px;
-                outline: none;
-                font-size: 16px;
-                width: 100%;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s ease;
-            }
-
-                #slide-bar input[type="email"]:focus {
-                    box-shadow: 0 0 15px #4ac1ff;
-                    border-color: #4ac1ff;
-                }
-
-            #slide-bar button {
-                padding: 15px;
-                border: none;
-                font-size: 18px;
-                font-weight: bold;
-                color: #ffffff;
-                background: linear-gradient(to right, #3a87bd, #4ac1ff);
-                border-radius: 30px;
-                cursor: pointer;
-                transition: transform 0.4s, box-shadow 0.3s;
-            }
-
-                #slide-bar button:hover {
-                    transform: scale(1.08);
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-                }
-
-        #slide-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 22px;
+        #slide-bar h2 {
+            font-size: 30px;
+            font-weight: 800;
             color: #ffffff;
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.3);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            line-height: 40px;
-            transition: background 0.4s, transform 0.4s;
+            text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            border-bottom: 3px solid #4ac1ff;
+            padding-bottom: 10px;
         }
 
-            #slide-close:hover {
-                background: rgba(255, 255, 255, 0.3);
-                transform: rotate(360deg);
-            }
+        #slide-bar .indicates-required {
+            font-size: 14px;
+            color: #f0f8ff;
+        }
 
-        #open-slide {
-            position: fixed;
-            top: 50%;
-            left: 15px;
-            background: linear-gradient(to right, #4ac1ff, #3a87bd);
-            color: #ffffff;
-            padding: 16px 24px;
+        #slide-bar .mc-field-group label {
             font-size: 16px;
-            border: none;
-            border-radius: 35px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
+            color: #ffffff;
+        }
+
+        #slide-bar input[type="email"] {
+            padding: 14px 20px;
+            border: 1px solid #3a87bd;
+            border-radius: 10px;
+            outline: none;
+            font-size: 16px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
-            #open-slide:hover {
-                background: linear-gradient(to left, #3a87bd, #4ac1ff);
-                transform: translateY(-5px);
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            #slide-bar input[type="email"]:focus {
+                box-shadow: 0 0 15px #4ac1ff;
+                border-color: #4ac1ff;
             }
 
-    </style>
+        #slide-bar button {
+            padding: 15px;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background: linear-gradient(to right, #3a87bd, #4ac1ff);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.4s, box-shadow 0.3s;
+        }
+
+            #slide-bar button:hover {
+                transform: scale(1.08);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            }
+
+    #slide-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 22px;
+        color: #ffffff;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.3);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        transition: background 0.4s, transform 0.4s;
+    }
+
+        #slide-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(360deg);
+        }
+
+    #open-slide {
+        position: fixed;
+        top: 50%;
+        left: 15px;
+        background: linear-gradient(to right, #4ac1ff, #3a87bd);
+        color: #ffffff;
+        padding: 16px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 35px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        #open-slide:hover {
+            background: linear-gradient(to left, #3a87bd, #4ac1ff);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+</style>
 <div id="main-container">
     <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
-        <div id="slide-bar">
-            <button id="slide-close">&times;</button>
-            <h2>Ưu đãi đặc biệt!</h2>
-            <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" onsubmit="handleSubscribe(event)">
-                <div class="mc-field-group">
-                    <label for="mce-EMAIL">Email của bạn<span class="asterisk">*</span></label>
-                    <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email của bạn" required>
-                </div>
-                <button type="submit" id="mc-embedded-subscribe" class="button">Đăng ký ngay</button>
-            </form>
-        </div>
+    <div id="slide-bar">
+        <button id="slide-close">&times;</button>
+        <h2>Ưu đãi đặc biệt!</h2>
+        <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" onsubmit="handleSubscribe(event)">
+            <div class="mc-field-group">
+                <label for="mce-EMAIL">Email của bạn<span class="asterisk">*</span></label>
+                <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email của bạn" required>
+            </div>
+            <button type="submit" id="mc-embedded-subscribe" class="button">Đăng ký ngay</button>
+        </form>
+    </div>
 
     <button id="open-slide" onclick="openSlideBar()">Menu</button>
 
-    </div>
+</div>
 
- 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
         slideBar.classList.remove('active'); // Đảm bảo slide-bar bị ẩn ngay lập tức
     });
 
-        // Hiển thị hoặc ẩn thanh trượt
-        const slideBar = document.getElementById('slide-bar');
-        const closeButton = document.getElementById('slide-close');
+    // Hiển thị hoặc ẩn thanh trượt
+    const slideBar = document.getElementById('slide-bar');
+    const closeButton = document.getElementById('slide-close');
 
-        function openSlideBar() {
-            slideBar.classList.add('active');
+    function openSlideBar() {
+        slideBar.classList.add('active');
+    }
+
+    closeButton.addEventListener('click', () => {
+        slideBar.classList.remove('active');
+    });
+
+    // Xử lý logic đăng ký Mailchimp
+    async function handleSubscribe(event) {
+        event.preventDefault(); // Ngăn form tải lại hoặc chuyển hướng
+
+        const form = event.target;
+        const emailInput = document.getElementById('mce-EMAIL').value;
+
+        if (!emailInput) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: 'Email không được để trống!',
+            });
+            return;
         }
 
-        closeButton.addEventListener('click', () => {
-            slideBar.classList.remove('active');
-        });
-
-        // Xử lý logic đăng ký Mailchimp
-        async function handleSubscribe(event) { 
-            event.preventDefault(); // Ngăn form tải lại hoặc chuyển hướng
-
-            const form = event.target;
-            const emailInput = document.getElementById('mce-EMAIL').value;
-
-            if (!emailInput) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: 'Email không được để trống!',
-                });
-                return;
-            }
-
-            const formData = new FormData(form);
+        const formData = new FormData(form);
         const mailchimpUrl = 'https://gmail.us12.list-manage.com/subscribe/post?u=f5d09299c989c215c0ba0e855&id=f333cca46f&f_id=00d343e0f0';
 
 
 
-            try {
-                const response = await fetch(mailchimpUrl, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors',
-                });
+        try {
+            const response = await fetch(mailchimpUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors',
+            });
 
-                // Giả sử mọi yêu cầu luôn thành công (do Mailchimp hạn chế trả về phản hồi CORS)
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đăng ký thành công!',
-                    text: 'Cảm ơn bạn đã đăng ký, chúng tôi sẽ liên lạc sớm!',
-                });
+            // Giả sử mọi yêu cầu luôn thành công (do Mailchimp hạn chế trả về phản hồi CORS)
+            Swal.fire({
+                icon: 'success',
+                title: 'Đăng ký thành công!',
+                text: 'Cảm ơn bạn đã đăng ký, chúng tôi sẽ liên lạc sớm!',
+            });
 
-                form.reset(); // Reset form sau khi gửi
-                slideBar.classList.remove('active'); // Đóng thanh trượt
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Đã có lỗi xảy ra!',
-                    text: 'Không thể hoàn tất đăng ký, vui lòng thử lại.',
-                });
-            }
+            form.reset(); // Reset form sau khi gửi
+            slideBar.classList.remove('active'); // Đóng thanh trượt
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Đã có lỗi xảy ra!',
+                text: 'Không thể hoàn tất đăng ký, vui lòng thử lại.',
+            });
         }
-    </script>
+    }
+</script>
 
- 
+
 
 <h1>@ViewData["Title"]</h1>
 

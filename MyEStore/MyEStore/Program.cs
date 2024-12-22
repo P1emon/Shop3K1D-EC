@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MyEStore.Entities;
 using MyEStore.Models;
@@ -67,4 +67,5 @@ app.MapControllerRoute(
     name: "product-detail",
     pattern: "{tenLoaiAlias}/{tenAlias}",
     defaults: new { controller = "Products", action = "Detail" });
+
 app.Run();

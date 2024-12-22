@@ -14,97 +14,216 @@
 <meta property="og:type" content="website" />
 
 <link rel="stylesheet" href="~/css/PHome.css" />
-<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
-<div id="promotion-icon-container" style="position: fixed; bottom: 100px; right: 20px; z-index: 1000;">
-    <button id="promotion-icon" title="Nhấn để nhận mã khuyến mãi" style="background-color: #ff6f61; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-size: 30px; cursor: pointer;">
-        ⭐
-    </button>
 
-</div>
+<style type="text/css">
+    #slide-bar {
+        visibility: hidden; /* Ẩn hoàn toàn slide bar */
+        left: -350px; /* Đảm bảo slide ra bên ngoài màn hình */
+        position: fixed;
+        top: 0;
+        width: 350px;
+        height: 100%;
+        background: radial-gradient(circle, #1e3c72, #2a5298);
+        box-shadow: 10px 0 25px rgba(0, 0, 0, 0.6);
+        transition: left 0.4s ease-in-out, visibility 0s 0.4s;
+        z-index: 1300;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+        overflow: hidden;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+    }
 
-<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+        #slide-bar.active {
+            visibility: visible; /* Hiện ra khi cần */
+            left: 0; /* Đưa vào vị trí hiển thị */
+            transition: left 0.4s ease-in-out;
+        }
 
-<div id="mc_embed_shell" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
-    <div id="mc_embed_signup" style="background: #f7f7f7; clear: left; font: 14px Helvetica, Arial, sans-serif; width: 600px; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        <form action="https://gmail.us13.list-manage.com/subscribe/post?u=9efdcf641b7a583b9b92e27e4&amp;id=90f72358a9&amp;f_id=00424ae1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
-            <div id="mc_embed_signup_scroll">
-                <h2>Đăng ký nhận mã khuyến mãi</h2>
-               
+
+            #slide-bar h2 {
+                font-size: 30px;
+                font-weight: 800;
+                color: #ffffff;
+                text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+                margin-bottom: 20px;
+                border-bottom: 3px solid #4ac1ff;
+                padding-bottom: 10px;
+            }
+
+            #slide-bar .indicates-required {
+                font-size: 14px;
+                color: #f0f8ff;
+            }
+
+            #slide-bar .mc-field-group label {
+                font-size: 16px;
+                color: #ffffff;
+            }
+
+            #slide-bar input[type="email"] {
+                padding: 14px 20px;
+                border: 1px solid #3a87bd;
+                border-radius: 10px;
+                outline: none;
+                font-size: 16px;
+                width: 100%;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+            }
+
+                #slide-bar input[type="email"]:focus {
+                    box-shadow: 0 0 15px #4ac1ff;
+                    border-color: #4ac1ff;
+                }
+
+            #slide-bar button {
+                padding: 15px;
+                border: none;
+                font-size: 18px;
+                font-weight: bold;
+                color: #ffffff;
+                background: linear-gradient(to right, #3a87bd, #4ac1ff);
+                border-radius: 30px;
+                cursor: pointer;
+                transition: transform 0.4s, box-shadow 0.3s;
+            }
+
+                #slide-bar button:hover {
+                    transform: scale(1.08);
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+                }
+
+        #slide-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 22px;
+            color: #ffffff;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            transition: background 0.4s, transform 0.4s;
+        }
+
+            #slide-close:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: rotate(360deg);
+            }
+
+        #open-slide {
+            position: fixed;
+            top: 50%;
+            left: 15px;
+            background: linear-gradient(to right, #4ac1ff, #3a87bd);
+            color: #ffffff;
+            padding: 16px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 35px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            #open-slide:hover {
+                background: linear-gradient(to left, #3a87bd, #4ac1ff);
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            }
+
+    </style>
+<div id="main-container">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+        <div id="slide-bar">
+            <button id="slide-close">&times;</button>
+            <h2>Ưu đãi đặc biệt!</h2>
+            <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" onsubmit="handleSubscribe(event)">
                 <div class="mc-field-group">
-                    <label for="mce-EMAIL">Email của bạn <span class="asterisk">*</span></label>
-                    <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Nhập email của bạn">
+                    <label for="mce-EMAIL">Email của bạn<span class="asterisk">*</span></label>
+                    <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email của bạn" required>
                 </div>
-                <div id="mce-responses" class="clear foot">
-                    <div class="response" id="mce-error-response" style="display: none;"></div>
-                    <div class="response" id="mce-success-response" style="display: none;"></div>
-                </div>
-                <div aria-hidden="true" style="position: absolute; left: -5000px;">
-                    <input type="text" name="b_9efdcf641b7a583b9b92e27e4_90f72358a9" tabindex="-1" value="">
-                </div>
-                <div class="optionalParent">
-                    <div class="clear foot">
-                        <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Nhận mã khuyến mãi">
-                    </div>
-                </div>
-            </div>
-        </form>
-        <button class="close-btn" onclick="togglePopup()" style="margin-top: 10px; background-color: #ff4c3b; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Đóng</button>
+                <button type="submit" id="mc-embedded-subscribe" class="button">Đăng ký ngay</button>
+            </form>
+        </div>
+
+    <button id="open-slide" onclick="openSlideBar()">Menu</button>
+
     </div>
-</div>
 
-<script>
-    function togglePopup() {
-        const embedShell = document.getElementById('mc_embed_shell');
-        const overlay = document.getElementById('overlay');
-        const isHidden = embedShell.style.display === 'none' || embedShell.style.display === '';
-        embedShell.style.display = isHidden ? 'block' : 'none';
-        overlay.style.display = isHidden ? 'block' : 'none';
-    }
-
-    document.getElementById('promotion-icon').addEventListener('click', () => {
-        togglePopup();
+ 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        slideBar.classList.remove('active'); // Đảm bảo slide-bar bị ẩn ngay lập tức
     });
 
-    // Ngừng việc chuyển hướng đến trang Mailchimp
-    document.getElementById('mc-embedded-subscribe-form').addEventListener('submit', (event) => {
-        event.preventDefault(); // Ngừng việc gửi form mặc định
-        showThankYouPopup();  // Hiển thị popup cảm ơn
-        // Sử dụng Fetch API hoặc Ajax để gửi dữ liệu form đi mà không reload/trang chuyển hướng
-        submitFormData();  // Giới thiệu về cách gọi Mailchimp API (hoặc của bạn) từ đây
-    });
+        // Hiển thị hoặc ẩn thanh trượt
+        const slideBar = document.getElementById('slide-bar');
+        const closeButton = document.getElementById('slide-close');
 
-    function showThankYouPopup() {
-        alert('Cảm ơn bạn đã đăng ký! Mã khuyến mãi sẽ được gửi đến email của bạn sớm nhất.');
-        togglePopup(); // Đóng popup sau khi gửi
-    }
+        function openSlideBar() {
+            slideBar.classList.add('active');
+        }
 
-    function submitFormData() {
-        const email = document.getElementById('mce-EMAIL').value;
+        closeButton.addEventListener('click', () => {
+            slideBar.classList.remove('active');
+        });
 
-        // Đơn giản dùng Fetch để gửi dữ liệu POST đi thay vì form submit
-        fetch('https://gmail.us13.list-manage.com/subscribe/post?u=9efdcf641b7a583b9b92e27e4&id=90f72358a9', {
-            method: 'POST',
-            body: new URLSearchParams({
-                'EMAIL': email,
-                'b_9efdcf641b7a583b9b92e27e4_90f72358a9': '',  // Thông tin này phải khớp với cấu hình Mailchimp
-            }),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        })
-            .then(response => response.json())  // Bạn có thể sử dụng json() tùy vào API của Mailchimp trả về gì
-            .then(data => console.log('Data sent successfully:', data))
-            .catch(error => console.error('Error sending data:', error));
-    }
+        // Xử lý logic đăng ký Mailchimp
+        async function handleSubscribe(event) { 
+            event.preventDefault(); // Ngăn form tải lại hoặc chuyển hướng
 
-    document.getElementById('overlay').addEventListener('click', togglePopup);
-    src = "https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    src = "https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();  // Kích hoạt tooltip cho các phần tử có data-toggle="tooltip"
-    });
-</script>
+            const form = event.target;
+            const emailInput = document.getElementById('mce-EMAIL').value;
 
+            if (!emailInput) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Email không được để trống!',
+                });
+                return;
+            }
+
+            const formData = new FormData(form);
+        const mailchimpUrl = 'https://gmail.us12.list-manage.com/subscribe/post?u=f5d09299c989c215c0ba0e855&id=f333cca46f&f_id=00d343e0f0';
+
+
+
+            try {
+                const response = await fetch(mailchimpUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors',
+                });
+
+                // Giả sử mọi yêu cầu luôn thành công (do Mailchimp hạn chế trả về phản hồi CORS)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đăng ký thành công!',
+                    text: 'Cảm ơn bạn đã đăng ký, chúng tôi sẽ liên lạc sớm!',
+                });
+
+                form.reset(); // Reset form sau khi gửi
+                slideBar.classList.remove('active'); // Đóng thanh trượt
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Đã có lỗi xảy ra!',
+                    text: 'Không thể hoàn tất đăng ký, vui lòng thử lại.',
+                });
+            }
+        }
+    </script>
+
+ 
 
 <h1>@ViewData["Title"]</h1>
 
@@ -120,7 +239,7 @@
             <!-- Thông tin sản phẩm -->
             <div class="hh-box-content">
                 <div class="hh-box-title">@hh.TenHh</div>
-                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N2") $</div>
+                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N0") VND</div>
                 <a class="hh-box-mua" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@hh.MaHh">Mua ngay</a>
 
                 <!-- Nút chia sẻ -->

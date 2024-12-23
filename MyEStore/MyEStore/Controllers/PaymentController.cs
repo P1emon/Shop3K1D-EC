@@ -90,12 +90,59 @@ namespace MyEStore.Controllers
             string resultCode = queryString["resultCode"];
             string orderId = queryString["orderId"];
             string message = queryString["message"];
+            string transId = queryString["transId"];
+            string amount = queryString["amount"];
 
             if (resultCode == "0")
             {
-                ViewBag.Message = "Thanh toán thành công!";
-                ViewBag.OrderId = orderId;
-                return View("Success");
+                try
+                {
+                    // Tạo hóa đơn mới
+                    var hoaDon = new HoaDon
+                    {
+                        MaKh = User.FindFirstValue("UserId"),
+                        NgayDat = DateTime.Now,
+                        HoTen = User.Identity.Name,
+                        DiaChi = "N/A",
+                        CachThanhToan = "MoMo",
+                        CachVanChuyen = "N/A",
+                        MaTrangThai = 0,
+                        GhiChu = $"transId={transId}, amount={amount}"
+                    };
+                    _ctx.Add(hoaDon);
+                    _ctx.SaveChanges();
+
+                    // Lưu chi tiết hóa đơn
+                    foreach (var item in CartItems)
+                    {
+                        var cthd = new ChiTietHd
+                        {
+                            MaHd = hoaDon.MaHd,
+                            MaHh = item.MaHh,
+                            DonGia = item.DonGia,
+                            SoLuong = item.SoLuong,
+                            GiamGia = 1
+                        };
+                        _ctx.Add(cthd);
+                    }
+                    _ctx.SaveChanges();
+
+                    // Xóa giỏ hàng
+                    HttpContext.Session.Set(CART_KEY, new List<CartItem>());
+
+                    // Gửi dữ liệu qua TempData
+                    TempData["TransactionId"] = transId;
+                    TempData["OrderId"] = orderId;
+
+                    ViewBag.Message = "Thanh toán thành công!";
+                    ViewBag.OrderId = orderId;
+                    return View("Success");
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Message = "Có lỗi khi lưu thông tin hóa đơn: " + e.Message;
+                    return View("MomoFail");
+                }
             }
             else
             {
@@ -104,6 +151,7 @@ namespace MyEStore.Controllers
                 return View("MomoFail");
             }
         }
+
 
         private static string GenerateSignature(string data, string secretKey)
         {

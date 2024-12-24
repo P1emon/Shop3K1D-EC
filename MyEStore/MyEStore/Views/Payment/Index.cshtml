@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyEStore.Models.CartItem>
+@model IEnumerable<MyEStore.Models.CartItem>
 
 @{
     ViewData["Title"] = "Thông tin đặt hàng";
@@ -50,6 +50,9 @@
         <form method="post" action="/Payment/MomoPayment">
             <button type="submit" class="btn btn-success">Thanh toán bằng MoMo</button>
         </form>
+        <form method="post" action="/Payment/VnpayOrder">
+            <button type="submit" class="btn btn-success">Thanh toán bằng VNPAY</button>
+        </form>
         <form id="paymentForm" method="post" action="@Url.Action("PaypalCapture", "Payment")">
     <div>
         <label for="ngayGiao">Ngày giao hàng:</label>
@@ -58,6 +61,8 @@
     <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
 </form>
 
+
+        <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
     </div>
 </div>
 @section Scripts {

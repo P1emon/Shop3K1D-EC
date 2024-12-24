@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MyEStore.Entities;
 using MyEStore.Models;
+using MyEStore.Servicess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,8 @@ builder.Services.AddSingleton(x =>
 		builder.Configuration["PayPalOptions:Mode"]
 	)
 );
+
+builder.Services.AddSingleton<IVnpayService, VnPayService>();
 
 var app = builder.Build();
 

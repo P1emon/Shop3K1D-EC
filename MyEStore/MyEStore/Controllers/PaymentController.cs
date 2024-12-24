@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyEStore.Entities;
+using MyEStore.Helpers;
 using MyEStore.Models;
+using MyEStore.Servicess;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -17,12 +19,14 @@ namespace MyEStore.Controllers
 		private readonly PaypalClient _paypalClient;
 		private readonly MyeStoreContext _ctx;
         private readonly IConfiguration _configuration;
+        private readonly IVnpayService _vnpayService;
 
-        public PaymentController(PaypalClient paypalClient, MyeStoreContext ctx, IConfiguration configuration)
+        public PaymentController(PaypalClient paypalClient, MyeStoreContext ctx, IConfiguration configuration, IVnpayService vnpayService)
         {
             _paypalClient = paypalClient;
             _ctx = ctx;
             _configuration = configuration;
+            _vnpayService = vnpayService;
         }
 
         [HttpPost]
@@ -205,7 +209,6 @@ namespace MyEStore.Controllers
 			}
 		}
 
-		[HttpPost]
         [HttpPost]
         public async Task<IActionResult> PaypalOrder(CancellationToken cancellationToken)
         {
@@ -319,10 +322,149 @@ namespace MyEStore.Controllers
 
 
 
+        [HttpPost]
+        public IActionResult VnpayOrder()
+        {
+            // Tính tổng tiền (VND)
+            var tongTien = CartItems.Sum(p => p.ThanhTien);
+
+            // Tạo model yêu cầu thanh toán
+            var paymentRequest = new VnPaymentRequestModel
+            {
+                Amount = tongTien,
+                OrderId = Guid.NewGuid().ToString().GetHashCode(), // Convert string to int
+                CreatedDate = DateTime.Now
+            };
+
+            try
+            {
+                // Gọi dịch vụ để tạo URL thanh toán
+                var paymentUrl = _vnpayService.CreatePaymentUrl(HttpContext, paymentRequest);
+
+                // Lưu thông tin hóa đơn vào database
+                var hoaDon = new HoaDon
+                {
+                    MaKh = User.FindFirstValue("UserId") ?? string.Empty, // Handle possible null reference
+                    NgayDat = DateTime.Now,
+                    HoTen = User.Identity?.Name ?? string.Empty, // Handle possible null reference
+                    DiaChi = "N/A",
+                    CachThanhToan = "VNPay",
+                    CachVanChuyen = "N/A",
+                    MaTrangThai = 0,
+                    GhiChu = "Đang chờ thanh toán VNPay"
+                };
+                _ctx.Add(hoaDon);
+                _ctx.SaveChanges();
+
+                // Lưu chi tiết hóa đơn (CartItems)
+                foreach (var item in CartItems)
+                {
+                    var cthd = new ChiTietHd
+                    {
+                        MaHd = hoaDon.MaHd,  // Mã hóa đơn vừa tạo
+                        MaHh = item.MaHh,    // Mã hàng hóa
+                        DonGia = item.DonGia, // Đơn giá
+                        SoLuong = item.SoLuong, // Số lượng
+                        GiamGia = 1 // Tùy chỉnh giảm giá nếu cần
+                    };
+                    _ctx.Add(cthd);
+                }
+                _ctx.SaveChanges(); // Lưu toàn bộ chi tiết hóa đơn vào database
+
+                // Xóa giỏ hàng sau khi tạo đơn hàng
+                HttpContext.Session.Set(CART_KEY, new List<CartItem>());
+
+                return Redirect(paymentUrl); // Chuyển hướng đến VNPay
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi và trả về lỗi
+                ViewBag.Message = "Lỗi tạo yêu cầu thanh toán: " + ex.Message;
+                return View("MomoFail");
+            }
+        }
+
         public async Task<IActionResult> Success()
         {
             return View();
         }
 
+        public IActionResult VnpayFail()
+        {
+            return View();
+        }
+        [HttpGet]
+        [HttpPost]
+        [Route("Payment/VnpayCallback")]
+        public IActionResult VnpayCallback()
+        {
+            try
+            {
+                // Lấy phản hồi từ VNPay
+                var response = _vnpayService.PaymentExcute(Request.Query);
+
+                if (response.Success)
+                {
+                    // Kiểm tra hóa đơn đã tồn tại dựa trên TransactionId
+                    var existingOrder = _ctx.HoaDons.FirstOrDefault(h => h.GhiChu.Contains($"TransactionId={response.TransactionId}"));
+
+                    if (existingOrder != null)
+                    {
+                        // Hóa đơn đã được xử lý trước đó, chỉ hiển thị thông báo thành công
+                        ViewBag.Message = "Hóa đơn đã được xử lý thành công!";
+                        return View("Success");
+                    }
+
+                    // Tìm hóa đơn đang chờ thanh toán dựa trên OrderId
+                    var pendingOrder = _ctx.HoaDons.FirstOrDefault(h => h.GhiChu.Contains($"Đang chờ thanh toán VNPay") && h.MaTrangThai == 0);
+
+                    if (pendingOrder != null)
+                    {
+                        // Cập nhật trạng thái hóa đơn
+                        pendingOrder.MaTrangThai = 1; // Hoàn tất
+                        pendingOrder.GhiChu += $", TransactionId={response.TransactionId}";
+                        _ctx.SaveChanges();
+
+                        // Xóa giỏ hàng sau khi thanh toán thành công
+                        HttpContext.Session.Set(CART_KEY, new List<CartItem>());
+
+                        ViewBag.Message = "Thanh toán thành công!";
+                        return View("Success");
+                    }
+                    else
+                    {
+                        // Nếu không tìm thấy hóa đơn đang chờ, tạo mới
+                        var hoaDon = new HoaDon
+                        {
+                            MaKh = User.FindFirstValue("UserId"),
+                            NgayDat = DateTime.Now,
+                            HoTen = User.Identity?.Name ?? string.Empty,
+                            DiaChi = "N/A",
+                            CachThanhToan = response.PaymentMethod,
+                            CachVanChuyen = "N/A",
+                            MaTrangThai = 1, // Hoàn tất
+                            GhiChu = $"TransactionId={response.TransactionId}, OrderId={response.OrderId}"
+                        };
+                        _ctx.Add(hoaDon);
+                        _ctx.SaveChanges();
+
+                        ViewBag.Message = "Thanh toán thành công!";
+                        return View("Success");
+                    }
+                }
+                else
+                {
+                    // Thanh toán thất bại
+                    ViewBag.Message = $"Thanh toán thất bại: {response.Message}";
+                    return View("VnpayFail");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+                ViewBag.Message = "Có lỗi xảy ra khi xử lý thanh toán: " + ex.Message;
+                return View("MomoFail");
+            }
+        }
     }
 }

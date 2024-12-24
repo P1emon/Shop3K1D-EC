@@ -32,6 +32,7 @@
                 }
             </tbody>
         </table>
+
         <div class="text-end mt-4">
             <h3 class="fw-bold">
                 Total:
@@ -40,49 +41,76 @@
         </div>
     </div>
 
+
+
     <div class="mt-5 text-center">
+       
+
         <h4 class="fw-bold mb-3">Proceed to Payment</h4>
         <form method="post" action="/Payment/MomoPayment">
             <button type="submit" class="btn btn-success">Thanh toán bằng MoMo</button>
         </form>
+        <form id="paymentForm" method="post" action="@Url.Action("PaypalCapture", "Payment")">
+    <div>
+        <label for="ngayGiao">Ngày giao hàng:</label>
+        <input type="date" id="ngayGiao" name="ngayGiao" />
+    </div>
+    <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
+</form>
 
-        <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
     </div>
 </div>
-
 @section Scripts {
-    <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
-    <script>
-        paypal.Buttons({
-            style: {
-                layout: 'vertical',
-                color: 'blue',
-                shape: 'pill',
-                label: 'paypal'
-            },
-            createOrder: (data, actions) => {
-                return fetch("/Payment/PaypalOrder", {
-                    method: "post",
-                }).then((response) => {
-                    if (!response.ok) {
-                        return response.json().then(error => { throw error; });
+        <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
+        <script>
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'blue',
+                    shape: 'pill',
+                    label: 'paypal'
+                },
+
+                // Khi tạo đơn hàng
+                createOrder: (data, actions) => {
+                    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy ngày giao từ form
+                    if (!ngayGiao) {
+                        alert("Vui lòng chọn ngày giao hàng.");
+                        return; // Dừng nếu không có ngày giao
                     }
 
-                    return response.json();
-                }).then((order) => order.id)
-                .catch(error => alert(error.message));
-            },
-            onApprove: (data, actions) => {
-                return fetch(`/Payment/PaypalCapture?orderId=${data.orderID}`, {
-                    method: "post",
-                }).then((response) => {
-                    if (!response.ok) {
-                        return response.json().then(error => { throw error; });
-                    }
+                    return fetch("/Payment/PaypalOrder", {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ ngayGiao })  // Gửi ngày giao qua payload
+                    })
+                    .then((response) => {
+                        if (!response.ok) {
+                            return response.json().then(error => { throw error; });
+                        }
+                        return response.json();
+                    })
+                    .then((order) => order.id)
+                    .catch(error => alert(error.message));
+                },
 
-                    window.location.href = "/Payment/Success";
-                }).catch(error => alert(error.message));
-            }
-        }).render('#paypal-button-container');
-    </script>
+                // Khi duyệt thanh toán
+                onApprove: (data, actions) => {
+                    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy lại ngày giao cho onApprove
+                    return fetch(`/Payment/PaypalCapture?orderId=${data.orderID}&ngayGiao=${ngayGiao}`, {
+                        method: "post"
+                    })
+                    .then((response) => {
+                        if (!response.ok) {
+                            return response.json().then(error => { throw error; });
+                        }
+
+                        window.location.href = "/Payment/Success";  // Điều hướng sau khi thanh toán thành công
+                    })
+                    .catch(error => alert(error.message));
+                }
+            }).render('#paypal-button-container');
+        </script>
 }

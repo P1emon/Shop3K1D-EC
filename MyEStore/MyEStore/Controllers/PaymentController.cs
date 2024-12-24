@@ -242,7 +242,7 @@ namespace MyEStore.Controllers
         }
 
 
-        public async Task<IActionResult> PaypalCapture(string orderId, CancellationToken cancellationToken)
+        public async Task<IActionResult> PaypalCapture(string orderId, string ngayGiao, CancellationToken cancellationToken)
         {
             try
             {
@@ -253,15 +253,27 @@ namespace MyEStore.Controllers
                     var reference = response.purchase_units[0].reference_id;
                     var transactionId = response.purchase_units[0].payments.captures[0].id;
 
+                    var userId = User.FindFirstValue("UserId");
+                    var userProfile = _ctx.KhachHangs.FirstOrDefault(u => u.MaKh == userId);
+                    string customerAddress = userProfile?.DiaChi ?? "N/A";
+
+                    DateTime? ngayGiaoDate = null;
+
+                    if (DateTime.TryParse(ngayGiao, out DateTime parsedDate)) // Kiểm tra ngày giao hợp lệ
+                    {
+                        ngayGiaoDate = parsedDate;
+                    }
+
                     var hoaDon = new HoaDon
                     {
-                        MaKh = User.FindFirstValue("UserId"),
+                        MaKh = userId,
                         NgayDat = DateTime.Now,
                         HoTen = User.Identity.Name,
-                        DiaChi = "N/A",
+                        DiaChi = customerAddress,
                         CachThanhToan = "Paypal",
                         CachVanChuyen = "N/A",
                         MaTrangThai = 0,
+                        NgayGiao = ngayGiaoDate,
                         GhiChu = $"reference_id={reference}, transactionId={transactionId}"
                     };
                     _ctx.Add(hoaDon);
@@ -283,7 +295,6 @@ namespace MyEStore.Controllers
 
                     HttpContext.Session.Set(CART_KEY, new List<CartItem>());
 
-                    // Gửi dữ liệu qua TempData
                     TempData["TransactionId"] = transactionId;
                     TempData["ReferenceId"] = reference;
 
@@ -303,7 +314,10 @@ namespace MyEStore.Controllers
 
                 return BadRequest(error);
             }
-		}
+        }
+
+
+
 
         public async Task<IActionResult> Success()
         {

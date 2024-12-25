@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyEStore.Entities;
 using MyEStore.Models;
 
@@ -107,6 +108,11 @@ namespace MyEStore.Controllers
             public int Id { get; set; }
             public int Qty { get; set; }
         }
+		[Authorize]
+        public IActionResult PaymentCallBack()
+		{
+			return View();
+		}
 
     }
 }

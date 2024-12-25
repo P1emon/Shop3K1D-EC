@@ -1,79 +1,125 @@
 ﻿@model MyEStore.Models.ProfileVM
-@Html.Partial("livechat") 
-<!-- Trigger Button (Hidden if automatically shown) -->
-<button type="button" class="btn btn-primary d-none" id="openProfileModal" data-bs-toggle="modal" data-bs-target="#profileModal"></button>
 
-<!-- Profile Modal -->
-<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0">
-            <!-- Modal Header -->
-            <div class="modal-header bg-gradient text-white text-center">
-                <h5 class="modal-title fw-bold mx-auto" id="profileModalLabel">Update Your Profile</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+<!-- Profile Page -->
+<div class="container py-5" id="profilePage">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient text-white text-center">
+            <h5 class="fw-bold">Update Your Profile</h5>
+            <i class="bi bi-x-lg text-danger position-absolute top-0 end-0 m-2" id="closeProfilePage" role="button" aria-label="Close"></i>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="UpdateProfile" method="post">
+                <!-- Full Name -->
+                <div class="mb-4">
+                    <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                    <input asp-for="FullName" class="form-control form-control-lg" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
 
-            <!-- Modal Body -->
-            <div class="modal-body p-5">
-                <form asp-action="Profile" method="post">
-                    <!-- Full Name -->
-                    <div class="mb-4">
-                        <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
-                        <input asp-for="FullName" class="form-control form-control-lg" />
-                        <span asp-validation-for="FullName" class="text-danger"></span>
-                    </div>
+                <!-- Email -->
+                <div class="mb-4">
+                    <label asp-for="Email" class="form-label fw-bold">Email</label>
+                    <input asp-for="Email" type="email" class="form-control form-control-lg" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
 
-                    <!-- Email -->
-                    <div class="mb-4">
-                        <label asp-for="Email" class="form-label fw-bold">Email</label>
-                        <input asp-for="Email" type="email" class="form-control form-control-lg" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-
-                    <!-- Current Password -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Current Password</label>
-                        <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Enter current password" required />
-                    </div>
-
-                    <!-- New Password -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">New Password</label>
-                        <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Enter new password" required />
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Confirm Password</label>
-                        <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Confirm new password" required />
-                    </div>
-
-                    <!-- Save Changes Button -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                    </div>
-                </form>
-            </div>
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    <button type="button" class="btn btn-outline-primary btn-lg" id="changePasswordBtn">Change Password</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+<!-- Change Password Page -->
+<div class="container py-5" id="changePasswordPage" style="display:none">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient text-white text-center">
+            <h5 class="fw-bold">Change Your Password</h5>
+            <i class="bi bi-x-lg text-danger position-absolute top-0 end-0 m-2" id="closeChangePasswordPage" role="button" aria-label="Close"></i>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="ChangePassword" method="post">
+                <!-- Current Password -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Current Password</label>
+                    <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Enter current password" required />
+                </div>
+
+                <!-- New Password -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">New Password</label>
+                    <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Enter new password" required />
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Confirm Password</label>
+                    <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Confirm new password" required />
+                </div>
+
+                <!-- Save Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Save Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Transition Effect Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("openProfileModal").click();
+        const changePasswordBtn = document.getElementById("changePasswordBtn");
+        const profilePage = document.getElementById("profilePage");
+        const changePasswordPage = document.getElementById("changePasswordPage");
+        const closeProfilePage = document.getElementById("closeProfilePage");
+        const closeChangePasswordPage = document.getElementById("closeChangePasswordPage");
+
+        changePasswordBtn.addEventListener("click", function () {
+            profilePage.style.transition = "opacity 0.5s";
+            profilePage.style.opacity = "0";
+            setTimeout(() => {
+                profilePage.style.display = "none";
+                changePasswordPage.style.display = "block";
+                changePasswordPage.style.opacity = "0";
+                changePasswordPage.style.transition = "opacity 0.5s";
+                setTimeout(() => {
+                    changePasswordPage.style.opacity = "1";
+                }, 10);
+            }, 500);
+        });
+
+        closeProfilePage.addEventListener("click", function () {
+            profilePage.style.transition = "opacity 0.5s";
+            profilePage.style.opacity = "0";
+            setTimeout(() => {
+                history.back();
+            }, 500);
+        });
+
+        closeChangePasswordPage.addEventListener("click", function () {
+            changePasswordPage.style.transition = "opacity 0.5s";
+            changePasswordPage.style.opacity = "0";
+            setTimeout(() => {
+                history.back();
+            }, 500);
+        });
     });
 </script>
 
+<!-- Styling -->
 <style>
     /* Header Gradient */
-    .modal-header.bg-gradient {
+    .card-header.bg-gradient {
         background: linear-gradient(135deg, #6a11cb, #2575fc);
     }
 
-    /* Modal Design */
-    .modal-content {
+    /* Card Design */
+    .card {
         border-radius: 20px;
-        overflow: hidden;
     }
 
     /* Form Control Styling */
@@ -97,11 +143,27 @@
             background: linear-gradient(135deg, #2575fc, #6a11cb);
         }
 
-    /* Modal Body Styling */
-    .modal-body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #f9f9f9;
-        border-radius: 15px;
-        padding: 40px;
+    .btn-outline-primary {
+        border-color: #6a11cb;
+        color: #6a11cb;
     }
+
+        .btn-outline-primary:hover {
+            background: #6a11cb;
+            color: #fff;
+        }
+
+    /* Close Icon Styling */
+    .bi-x-lg {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+        .bi-x-lg.text-danger {
+            color: red;
+        }
+
+            .bi-x-lg.text-danger:hover {
+                color: darkred;
+            }
 </style>

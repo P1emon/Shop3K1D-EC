@@ -12,6 +12,8 @@
 <meta property="og:image" content="@Url.Content("~/images/default-og-image.jpg")" />
 <meta property="og:url" content="@siteUrl" />
 <meta property="og:type" content="website" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
 <link rel="stylesheet" href="~/css/PHome.css" />
 
@@ -130,6 +132,9 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
         #open-slide:hover {
@@ -153,12 +158,19 @@
         </form>
     </div>
 
-    <button id="open-slide" onclick="openSlideBar()">Menu</button>
+    <button id="open-slide" onclick="openSlideBar()" title="Đăng ký để nhận ưu đãi ngay">
+        <i class="fas fa-tag"></i> Ưu đãi
+    </button>
 
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function openSlideBar() {
+        alert('Slide bar opened!');
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         slideBar.classList.remove('active'); // Đảm bảo slide-bar bị ẩn ngay lập tức

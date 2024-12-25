@@ -47,17 +47,21 @@
        
 
         <h4 class="fw-bold mb-3">Proceed to Payment</h4>
+        <div>
+        <label for="ngayGiao">Ngày giao hàng:</label>
+        <input type="date" id="ngayGiao" name="ngayGiao" />
+         </div>
         <form method="post" action="/Payment/MomoPayment">
             <button type="submit" class="btn btn-success">Thanh toán bằng MoMo</button>
         </form>
         <form method="post" action="/Payment/VnpayOrder">
-            <button type="submit" class="btn btn-success">Thanh toán bằng VNPAY</button>
-        </form>
+    <input type="hidden" id="ngayGiao" name="ngayGiao" />
+    <button type="submit" class="btn btn-success">Thanh toán bằng VNPAY</button>
+</form>
+
         <form id="paymentForm" method="post" action="@Url.Action("PaypalCapture", "Payment")">
-    <div>
-        <label for="ngayGiao">Ngày giao hàng:</label>
-        <input type="date" id="ngayGiao" name="ngayGiao" />
-    </div>
+        
+    
     <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
 </form>
 
@@ -65,6 +69,21 @@
         <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
     </div>
 </div>
+<script>
+    document.querySelector('form[action="/Payment/VnpayOrder"]').addEventListener('submit', function (e) {
+    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy ngày giao từ form
+
+    if (!ngayGiao) {
+        alert("Vui lòng chọn ngày giao hàng.");
+        e.preventDefault(); // Dừng lại nếu không có ngày giao
+    }
+
+    // Gửi ngày giao hàng vào yêu cầu
+    const form = e.target;
+    form.querySelector('[name="ngayGiao"]').value = ngayGiao;
+});
+
+</script>
 @section Scripts {
         <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
         <script>

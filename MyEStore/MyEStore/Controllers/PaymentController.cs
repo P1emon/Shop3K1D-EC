@@ -323,10 +323,24 @@ namespace MyEStore.Controllers
 
 
         [HttpPost]
-        public IActionResult VnpayOrder()
+        public IActionResult VnpayOrder(string ngayGiao)
         {
             // Tính tổng tiền (VND)
             var tongTien = CartItems.Sum(p => p.ThanhTien);
+
+            // Lấy userId và thông tin khách hàng từ cơ sở dữ liệu
+            var userId = User.FindFirstValue("UserId");
+            var userProfile = _ctx.KhachHangs.FirstOrDefault(u => u.MaKh == userId);
+
+            // Lấy địa chỉ của khách hàng, nếu không có thì dùng "N/A"
+            string customerAddress = userProfile?.DiaChi ?? "N/A";
+
+            // Kiểm tra ngày giao hợp lệ
+            DateTime? ngayGiaoDate = null;
+            if (DateTime.TryParse(ngayGiao, out DateTime parsedDate))
+            {
+                ngayGiaoDate = parsedDate;
+            }
 
             // Tạo model yêu cầu thanh toán
             var paymentRequest = new VnPaymentRequestModel
@@ -344,13 +358,14 @@ namespace MyEStore.Controllers
                 // Lưu thông tin hóa đơn vào database
                 var hoaDon = new HoaDon
                 {
-                    MaKh = User.FindFirstValue("UserId") ?? string.Empty, // Handle possible null reference
+                    MaKh = userId ?? string.Empty, // Handle possible null reference
                     NgayDat = DateTime.Now,
                     HoTen = User.Identity?.Name ?? string.Empty, // Handle possible null reference
-                    DiaChi = "N/A",
+                    DiaChi = customerAddress, // Địa chỉ của khách hàng
                     CachThanhToan = "VNPay",
                     CachVanChuyen = "N/A",
                     MaTrangThai = 0,
+                    NgayGiao = ngayGiaoDate, // Thêm ngày giao
                     GhiChu = "Đang chờ thanh toán VNPay"
                 };
                 _ctx.Add(hoaDon);
@@ -361,10 +376,10 @@ namespace MyEStore.Controllers
                 {
                     var cthd = new ChiTietHd
                     {
-                        MaHd = hoaDon.MaHd,  // Mã hóa đơn vừa tạo
-                        MaHh = item.MaHh,    // Mã hàng hóa
-                        DonGia = item.DonGia, // Đơn giá
-                        SoLuong = item.SoLuong, // Số lượng
+                        MaHd = hoaDon.MaHd,
+                        MaHh = item.MaHh,
+                        DonGia = item.DonGia,
+                        SoLuong = item.SoLuong,
                         GiamGia = 1 // Tùy chỉnh giảm giá nếu cần
                     };
                     _ctx.Add(cthd);
@@ -383,6 +398,8 @@ namespace MyEStore.Controllers
                 return View("MomoFail");
             }
         }
+
+
 
         public async Task<IActionResult> Success()
         {

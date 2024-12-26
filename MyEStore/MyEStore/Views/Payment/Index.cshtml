@@ -1,140 +1,131 @@
 @model IEnumerable<MyEStore.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Thông tin đặt hàng";
+    ViewData["Title"] = "Thanh Toán";
 }
-@Html.Partial("livechat") 
-<div class="container py-5">
-    <h1 class="text-center fw-bold mb-4" style="color: #333;">Order Details</h1>
-    <div class="cart-table table-responsive shadow-sm p-4 rounded" style="background-color: #ffffff; border: 1px solid #e6e6e6;">
-        <table class="table table-borderless align-middle text-center">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Thumbnail</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr style="border-bottom: 1px solid #e6e6e6;">
-                        <td>
-                            <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="width: 80px; height: auto;">
-                        </td>
-                        <td class="fw-semibold" style="color: #333;">@item.TenHh</td>
-                        <td class="text-success fw-bold">@item.DonGia.ToString("#,##0.00") đ</td>
-                        <td>@item.SoLuong</td>
-                        <td class="text-danger fw-bold">@item.ThanhTien.ToString("#,##0.00") đ</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
 
-        <div class="text-end mt-4">
-            <h3 class="fw-bold">
-                Total:
-                <span class="text-danger">@Model.Sum(p => p.ThanhTien).ToString("#,##0.00") đ</span>
-            </h3>
+@Html.Partial("livechat")
+
+<div class="container py-5" style="max-width: 1400px;">
+    <h1 class="text-center fw-bold mb-5" style="color: #4A5568;">Xác Nhận Thanh Toán</h1>
+
+    <div class="row">
+        <!-- Order Summary Form -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h4 class="text-center fw-bold mb-4" style="color: #2D3748;">Thông Tin Đơn Hàng</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="bg-gradient-primary text-black">
+                                <tr>
+                                    <th>Hình Ảnh</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Đơn Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Thành Tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail rounded" style="width: 80px; height: 80px;">
+                                        </td>
+                                        <td>@item.TenHh</td>
+                                        <td>@item.DonGia.ToString("#,##0.00") đ</td>
+                                        <td>@item.SoLuong</td>
+                                        <td class="text-danger fw-bold">@item.ThanhTien.ToString("#,##0.00") đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <h3>
+                            Tổng cộng:
+                            <span class="text-danger fw-bold">@Model.Sum(p => p.ThanhTien).ToString("#,##0.00") đ</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="col-lg-4">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h4 class="text-center fw-bold mb-4" style="color: #2D3748;">Phương Thức Thanh Toán</h4>
+                    <div class="mb-4 text-center">
+                        <label for="ngayGiao" class="form-label fw-bold">Ngày Giao Hàng:</label>
+                        <input type="date" id="ngayGiao" name="ngayGiao" class="form-control d-inline-block" style="width: 250px; font-size: 1.2rem;" />
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+                        <form method="post" action="/Payment/MomoPayment">
+                            <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">Thanh Toán Bằng MoMo</button>
+                        </form>
+                        <form method="post" action="/Payment/VnpayOrder">
+                            <input type="hidden" name="ngayGiao" />
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Thanh Toán Bằng VNPay</button>
+                        </form>
+                        <form id="paymentForm" method="post" action="@Url.Action("PaypalCapture", "Payment")">
+                            <div id="paypal-button-container"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-    <div class="mt-5 text-center">
-       
-
-        <h4 class="fw-bold mb-3">Proceed to Payment</h4>
-        <div>
-        <label for="ngayGiao">Ngày giao hàng:</label>
-        <input type="date" id="ngayGiao" name="ngayGiao" />
-         </div>
-        <form method="post" action="/Payment/MomoPayment">
-            <button type="submit" class="btn btn-success">Thanh toán bằng MoMo</button>
-        </form>
-        <form method="post" action="/Payment/VnpayOrder">
-    <input type="hidden" id="ngayGiao" name="ngayGiao" />
-    <button type="submit" class="btn btn-success">Thanh toán bằng VNPAY</button>
-</form>
-
-        <form id="paymentForm" method="post" action="@Url.Action("PaypalCapture", "Payment")">
-        
-    
-    <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
-</form>
-
-
-        <div id="paypal-button-container" style="max-width: 300px; margin: 0 auto;"></div>
-    </div>
 </div>
+
 <script>
     document.querySelector('form[action="/Payment/VnpayOrder"]').addEventListener('submit', function (e) {
-    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy ngày giao từ form
+        const ngayGiao = document.getElementById('ngayGiao').value;
+        if (!ngayGiao) {
+            alert("Vui lòng chọn ngày giao hàng.");
+            e.preventDefault();
+        } else {
+            this.querySelector('[name="ngayGiao"]').value = ngayGiao;
+        }
+    });
 
-    if (!ngayGiao) {
-        alert("Vui lòng chọn ngày giao hàng.");
-        e.preventDefault(); // Dừng lại nếu không có ngày giao
-    }
-
-    // Gửi ngày giao hàng vào yêu cầu
-    const form = e.target;
-    form.querySelector('[name="ngayGiao"]').value = ngayGiao;
-});
-
+    paypal.Buttons({
+        style: {
+            layout: 'horizontal',
+            color: 'blue',
+            shape: 'rect',
+            label: 'pay'
+        },
+        createOrder: (data, actions) => {
+            const ngayGiao = document.getElementById('ngayGiao').value;
+            if (!ngayGiao) {
+                alert("Vui lòng chọn ngày giao hàng.");
+                return;
+            }
+            return fetch("/Payment/PaypalOrder", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ngayGiao })
+            })
+                .then(response => response.json())
+                .then(order => order.id);
+        },
+        onApprove: (data, actions) => {
+            const ngayGiao = document.getElementById('ngayGiao').value;
+            return fetch(`/Payment/PaypalCapture?orderId=${data.orderID}&ngayGiao=${ngayGiao}`, {
+                method: "POST"
+            })
+                .then(() => window.location.href = "/Payment/Success")
+                .catch(err => alert(err.message));
+        }
+    }).render('#paypal-button-container');
 </script>
+
 @section Scripts {
-        <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
-        <script>
-            paypal.Buttons({
-                style: {
-                    layout: 'vertical',
-                    color: 'blue',
-                    shape: 'pill',
-                    label: 'paypal'
-                },
-
-                // Khi tạo đơn hàng
-                createOrder: (data, actions) => {
-                    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy ngày giao từ form
-                    if (!ngayGiao) {
-                        alert("Vui lòng chọn ngày giao hàng.");
-                        return; // Dừng nếu không có ngày giao
-                    }
-
-                    return fetch("/Payment/PaypalOrder", {
-                        method: "post",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ ngayGiao })  // Gửi ngày giao qua payload
-                    })
-                    .then((response) => {
-                        if (!response.ok) {
-                            return response.json().then(error => { throw error; });
-                        }
-                        return response.json();
-                    })
-                    .then((order) => order.id)
-                    .catch(error => alert(error.message));
-                },
-
-                // Khi duyệt thanh toán
-                onApprove: (data, actions) => {
-                    const ngayGiao = document.getElementById('ngayGiao').value; // Lấy lại ngày giao cho onApprove
-                    return fetch(`/Payment/PaypalCapture?orderId=${data.orderID}&ngayGiao=${ngayGiao}`, {
-                        method: "post"
-                    })
-                    .then((response) => {
-                        if (!response.ok) {
-                            return response.json().then(error => { throw error; });
-                        }
-
-                        window.location.href = "/Payment/Success";  // Điều hướng sau khi thanh toán thành công
-                    })
-                    .catch(error => alert(error.message));
-                }
-            }).render('#paypal-button-container');
-        </script>
+    <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
 }

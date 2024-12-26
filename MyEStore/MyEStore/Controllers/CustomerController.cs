@@ -6,6 +6,9 @@ using MyEStore.Entities;
 using MyEStore.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Net.Mail;
+using System.Net;
 
 namespace MyEStore.Controllers
 {
@@ -27,33 +30,38 @@ namespace MyEStore.Controllers
         public async Task<IActionResult> Login(LoginVM model, string? ReturnUrl)
         {
             ViewBag.ReturnUrl = ReturnUrl;
-            var kh = _ctx.KhachHangs.SingleOrDefault(p => p.MaKh == model.UserName && p.MatKhau == model.Password);
-            if (kh == null)
+
+            // Tìm người dùng trong cơ sở dữ liệu
+            var kh = _ctx.KhachHangs.SingleOrDefault(p => p.MaKh == model.UserName);
+            if (kh == null || !BCrypt.Net.BCrypt.Verify(model.Password, kh.MatKhau))
             {
                 ViewBag.ThongBao = "Sai thông tin đăng nhập";
                 return View();
             }
 
+            // Tạo các claims cho user
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Name, kh.HoTen),
         new Claim(ClaimTypes.Email, kh.Email),
         new Claim("UserId", kh.MaKh),
-        // Làm động lấy role trong DB
-        new Claim(ClaimTypes.Role, "Administrator")
+        new Claim(ClaimTypes.Role, "Administrator") // Tùy thuộc vào vai trò trong DB
     };
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
 
+            // Đăng nhập bằng cookie authentication
             await HttpContext.SignInAsync(claimPrincipal);
+
+            // Điều hướng đến ReturnUrl nếu có, nếu không chuyển đến trang khác
             if (!string.IsNullOrEmpty(ReturnUrl))
             {
                 return Redirect(ReturnUrl);
             }
-            return RedirectToAction("Index", "Cart"); 
+
+            return RedirectToAction("Index", "Cart");
         }
+
 
 
         [Authorize]
@@ -104,11 +112,14 @@ namespace MyEStore.Controllers
                 return View(model);
             }
 
+            // Hash the password before saving it
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
             // Create new customer
             var newCustomer = new KhachHang
             {
                 MaKh = model.UserName,
-                MatKhau = model.Password,
+                MatKhau = hashedPassword,  // Store the hashed password
                 HoTen = model.FullName,
                 Email = model.Email,
                 // Thêm các trường khác nếu cần
@@ -237,6 +248,77 @@ namespace MyEStore.Controllers
             return View(order);
         }
 
+        #region ForgotPassword
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var khachHang = await _ctx.KhachHangs.SingleOrDefaultAsync(kh => kh.Email == email);
+            if (khachHang == null)
+            {
+                ViewBag.ErrorMessage = "Email không tồn tại.";
+                return View();
+            }
+
+            var newPassword = GenerateRandomPassword();
+            khachHang.MatKhau = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            await _ctx.SaveChangesAsync();
+
+            string message = $@"
+        <p>Xin chào: {khachHang.HoTen},</p>
+        <p>Mật khẩu mới của bạn là: <strong>{newPassword}</strong></p>
+        <p>Vui lòng đăng nhập lại và đổi mật khẩu mới để đảm bảo an toàn.</p>";
+
+            await SendEmail(khachHang.Email, "Mật khẩu mới của bạn", message);
+
+            ViewBag.SuccessMessage = "Mật khẩu mới đã được gửi đến email của bạn.";
+            return View();
+        }
+
+        private string GenerateRandomPassword(int length = 8)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            var random = new Random();
+            return new string(Enumerable.Repeat(validChars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private async Task SendEmail(string toEmail, string subject, string message)
+        {
+            var client = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential("truongminhduc4002@gmail.com", "hocekpuhklqvkniu"),
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("truongminhduc4002@gmail.com"),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
+            mailMessage.To.Add(toEmail);
+
+            try
+            {
+                await client.SendMailAsync(mailMessage);
+            }
+            catch (SmtpException ex)
+            {
+                // Xử lý lỗi gửi email
+                Console.WriteLine($"SMTP Exception: {ex.Message}");
+                throw;
+            }
+        }
+
+        #endregion
 
     }
 }

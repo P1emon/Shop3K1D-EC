@@ -320,5 +320,55 @@ namespace MyEStore.Controllers
 
         #endregion
 
+        // GET: Hiển thị địa chỉ của khách hàng
+       
+
+        // POST: Cập nhật địa chỉ của khách hàng
+        [HttpGet]
+        public IActionResult Address()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var customer = _ctx.KhachHangs.SingleOrDefault(kh => kh.MaKh == userId);
+
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            // Truyền địa chỉ hiện tại của khách hàng vào View
+            return View(customer);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateAddress(string diaChi)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var customer = _ctx.KhachHangs.SingleOrDefault(kh => kh.MaKh == userId);
+
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            // Cập nhật địa chỉ mới
+            customer.DiaChi = diaChi;
+            _ctx.SaveChanges();
+
+            TempData["Success"] = "Cập nhật thành công địa chỉ nhập hàng.";
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

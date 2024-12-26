@@ -4,19 +4,38 @@
     ViewData["Title"] = "Manage Shipping Address";
 }
 
-<h2>Manage Shipping Address</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Địa chỉ nhận hàng</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateAddress" method="post">
+                        <div class="form-group mb-3">
+                            <label for="HoTen" class="form-label">Tên khách hàng</label>
+                            <input type="text" class="form-control" id="HoTen" name="hoTen" value="@Model.HoTen" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="SoDienThoai" name="soDienThoai" value="@Model.DienThoai" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="DiaChi" class="form-label">Địa chỉ nhận hàng</label>
+                            <textarea class="form-control" id="DiaChi" name="diaChi" rows="3" required>@Model.DiaChi</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Lưu lại</button>
+                    </form>
 
-<form asp-action="UpdateAddress" method="post">
-    <div class="form-group">
-        <label for="DiaChi">Shipping Address</label>
-        <input type="text" class="form-control" id="DiaChi" name="diaChi" value="@Model.DiaChi" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Save Address</button>
-</form>
-
-@if (TempData["Success"] != null)
-{
-        <div class="alert alert-success">
-        @TempData["Success"]
+                    @if (TempData["Success"] != null)
+                    {
+                            <div class="alert alert-success mt-3">
+                                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+                            </div>
+                    }
+                </div>
+            </div>
         </div>
-}
+    </div>
+</div>

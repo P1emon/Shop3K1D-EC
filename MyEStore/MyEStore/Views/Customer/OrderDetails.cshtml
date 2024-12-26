@@ -1,99 +1,30 @@
 ﻿@model dynamic
 @Html.Partial("livechat")
-
-<style>
-    body {
-        background-color: #f8f8f8;
-        color: #333;
-        font-family: Arial, sans-serif;
-    }
-
-    h2, h3 {
-        color: #000;
-    }
-
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        margin: 20px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-        table th, table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #333;
-            color: #fff;
-        }
-
-        table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-    .currency {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .total-price {
-        font-size: 1.2em;
-        color: #000;
-        font-weight: bold;
-    }
-
-    .currency-select {
-        margin-top: 10px;
-    }
-
-    .btn {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-        .btn:hover {
-            background-color: #444;
-        }
-</style>
-
+<link rel="stylesheet" href="~/css/Orderdetail.css" />
 <div class="container">
-    <h2>Order Details (ID: @Model.MaHd)</h2>
-    <p><strong>Date:</strong> @Model.NgayDat.ToString("dd/MM/yyyy")</p>
-    <p><strong>Customer:</strong> @Model.HoTen</p>
-    <p><strong>Address:</strong> @Model.DiaChi</p>
-    <p><strong>Payment Method:</strong> @Model.CachThanhToan</p>
+    <h2>Chi tiết đơn hàng (ID: @Model.MaHd)</h2>
+    <p><strong>Ngày đặt:</strong> @Model.NgayDat.ToString("dd/MM/yyyy")</p>
+    <p><strong>Khách hàng:</strong> @Model.HoTen</p>
+    <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+    <p><strong>Phương thức thanh toán:</strong> @Model.CachThanhToan</p>
 
     <div class="currency-select">
-        <label for="currency">Select Currency:</label>
-        <select id="currency" class="btn" onchange="updateCurrency()">
+        <label for="currency">Chọn đơn vị tiền tệ: </label>
+        <select id="currency" onchange="updateCurrency()">
             <option value="VND">VND</option>
             <option value="USD">USD</option>
         </select>
     </div>
 
-    <h3>Products</h3>
-    <table class="table">
+    <h3>Sản phẩm</h3>
+    <table>
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Tổng</th>
             </tr>
         </thead>
         <tbody>
@@ -101,7 +32,7 @@
             {
                 <tr>
                     <td>
-                        <img src="~/Hinh/HangHoa/@product.Hinh" alt="@product.ProductName" style="width: 100px; height: auto;" />
+                        <img src="~/Hinh/HangHoa/@product.Hinh" alt="@product.ProductName" class="img-product" />
                     </td>
                     <td>@product.ProductName</td>
                     <td>@product.SoLuong</td>
@@ -113,27 +44,29 @@
     </table>
 
     <div class="total-price">
-        <p><strong>Total:</strong> <span id="totalPrice"></span> <span id="currencySymbol">VND</span></p>
+        <p><strong>Tổng cộng: </strong><span id="totalPrice"></span> <span id="currencySymbol">VND</span></p>
     </div>
+
+    <button class="btn" onclick="window.print()">In đơn hàng</button>
 </div>
 
 <script>
-    // Tính toán tổng tiền theo loại tiền tệ
+    // Calculate total based on selected currency
     function updateCurrency() {
         var currency = document.getElementById("currency").value;
         var total = 0;
 
-        // Lấy tất cả các giá trị tổng tiền từ bảng
+        // Get all rows of the table
         var rows = document.querySelectorAll("table tbody tr");
         rows.forEach(function(row) {
-            var unitPrice = parseFloat(row.cells[3].textContent);  // Đơn giá
-            var quantity = parseInt(row.cells[2].textContent);  // Số lượng
+            var unitPrice = parseFloat(row.cells[3].textContent);  // Unit price
+            var quantity = parseInt(row.cells[2].textContent);  // Quantity
             total += unitPrice * quantity;
         });
 
-        // Hiển thị tổng tiền tùy theo loại tiền tệ
+        // Update total value based on currency selected
         if (currency === "USD") {
-            total /= 25400;  // Chuyển đổi VND sang USD (1 USD = 25,000 VND)
+            total /= 25400;  // Convert VND to USD (1 USD = 25,000 VND)
             document.getElementById("currencySymbol").textContent = "USD";
         } else {
             document.getElementById("currencySymbol").textContent = "VND";
@@ -142,6 +75,6 @@
         document.getElementById("totalPrice").textContent = total.toFixed(2);
     }
 
-    // Gọi hàm để tính toán tổng tiền ngay khi load trang
+    // Call function to calculate total when the page loads
     updateCurrency();
 </script>

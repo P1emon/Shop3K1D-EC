@@ -1,0 +1,161 @@
+﻿
+<style >
+/* Tổng thể giao diện */
+body {
+    background-color: #F4F7F6;
+    font-family: 'Poppins', sans-serif;
+    color: #555;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 2.2em;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* Bảng thông tin sản phẩm */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+    table th, table td {
+        padding: 16px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #0275d8;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    table td {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+
+    table tbody tr:hover {
+        background-color: #e5e5e5;
+    }
+
+.img-product {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+    .img-product:hover {
+        transform: scale(1.1);
+    }
+
+.currency-select {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+}
+
+    .currency-select label {
+        font-weight: 600;
+        color: #444;
+        margin-right: 10px;
+    }
+
+    .currency-select select {
+        padding: 8px 16px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 1em;
+        background-color: #fff;
+        color: #555;
+        transition: all 0.3s;
+    }
+
+        .currency-select select:hover {
+            border-color: #0275d8;
+        }
+
+.total-price {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Nút bấm */
+.btn {
+    background-color: #0275d8;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: block;
+    margin: 20px auto 0;
+    text-align: center;
+}
+
+    .btn:hover {
+        background-color: #025aa5;
+    }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table td, table th {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    .img-product {
+        width: 80px;
+    }
+
+    .currency-select {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .currency-select select {
+            margin-top: 8px;
+            width: 100%;
+        }
+
+    .total-price {
+        font-size: 1.4em;
+    }
+}
+
+</style

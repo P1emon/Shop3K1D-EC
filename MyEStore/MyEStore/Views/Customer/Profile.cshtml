@@ -3,15 +3,15 @@
 <!-- Profile Page -->
 <div class="container py-5" id="profilePage">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient text-white text-center">
-            <h5 class="fw-bold">Update Your Profile</h5>
+        <div class="card-header bg-gradient text-Black text-center">
+            <h5 class="fw-bold">Thông tin cá nhân</h5>
             <i class="bi bi-x-lg text-danger position-absolute top-0 end-0 m-2" id="closeProfilePage" role="button" aria-label="Close"></i>
         </div>
         <div class="card-body p-5">
             <form asp-action="UpdateProfile" method="post">
                 <!-- Full Name -->
                 <div class="mb-4">
-                    <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                    <label asp-for="FullName" class="form-label fw-bold">Họ và Tên</label>
                     <input asp-for="FullName" class="form-control form-control-lg" />
                     <span asp-validation-for="FullName" class="text-danger"></span>
                 </div>
@@ -25,8 +25,8 @@
 
                 <!-- Buttons -->
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                    <button type="button" class="btn btn-outline-primary btn-lg" id="changePasswordBtn">Change Password</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Lưu thông tin</button>
+                    <button type="button" class="btn btn-outline-primary btn-lg" id="changePasswordBtn">Đổi mật khẩu</button>
                 </div>
             </form>
         </div>
@@ -36,33 +36,33 @@
 <!-- Change Password Page -->
 <div class="container py-5" id="changePasswordPage" style="display:none">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient text-white text-center">
-            <h5 class="fw-bold">Change Your Password</h5>
+        <div class="card-header bg-gradient text-black text-center">
+            <h5 class="fw-bold">Đổi mật khẩu</h5>
             <i class="bi bi-x-lg text-danger position-absolute top-0 end-0 m-2" id="closeChangePasswordPage" role="button" aria-label="Close"></i>
         </div>
         <div class="card-body p-5">
             <form asp-action="ChangePassword" method="post">
                 <!-- Current Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Current Password</label>
-                    <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Enter current password" required />
+                    <label class="form-label fw-bold">Mật khẩu hiện tại</label>
+                    <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu hiện tại" required />
                 </div>
 
                 <!-- New Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">New Password</label>
-                    <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Enter new password" required />
+                    <label class="form-label fw-bold">Mật khẩu mới</label>
+                    <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu mới" required />
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Confirm Password</label>
-                    <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Confirm new password" required />
+                    <label class="form-label fw-bold">Nhập lại mật khẩu</label>
+                    <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Nhập lại mật khẩu mới" required />
                 </div>
 
                 <!-- Save Button -->
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">Save Password</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Đổi mật khẩu</button>
                 </div>
             </form>
         </div>

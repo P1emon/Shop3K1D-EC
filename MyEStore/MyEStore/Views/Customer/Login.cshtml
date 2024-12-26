@@ -6,32 +6,32 @@
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
     <div class="p-5 rounded shadow-lg" style="background-color: #ffffff; max-width: 400px; width: 100%;">
-        <h2 class="text-center fw-bold mb-4" style="color: #000;">Welcome Back</h2>
-        <p class="text-center text-muted mb-4">Please enter your login details to continue.</p>
+        <h2 class="text-center fw-bold mb-4" style="color: #000;">Chào mừng bạn trở lại</h2>
+        <p class="text-center text-muted mb-4">Vui lòng nhập thông tin đăng nhập của bạn để tiếp tục.</p>
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <div class="text-danger mb-3">@ViewBag.ThongBao</div>
             <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
             <div class="form-group mb-3">
-                <label asp-for="UserName" class="form-label fw-bold">Username</label>
+                <label asp-for="UserName" class="form-label fw-bold">Tên tài khoản</label>
                 <input asp-for="UserName" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group mb-4">
-                <label asp-for="Password" class="form-label fw-bold">Password</label>
+                <label asp-for="Password" class="form-label fw-bold">Mật khẩu</label>
                 <input asp-for="Password" type="password" class="form-control" style="border: 1px solid #ddd; border-radius: 5px;" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                <button type="submit" class="btn btn-dark btn-lg">Đăng nhập</button>
             </div>
         </form>
         <p class="text-center mt-4 text-muted">
-            Don't have an account?
-            <a href="/Customer/Register" class="text-decoration-none" style="color: #000;">Register</a>
+            Bạn đã có tài khoản?
+            <a href="/Customer/Register" class="text-decoration-none" style="color: #000;">Đăng ký</a>
         </p>
         <p class="text-center mt-4 text-muted">
-            <a href="/Customer/ForgotPassword" class="text-decoration-none" style="color: #000;">Forgot Password?</a>
+            <a href="/Customer/ForgotPassword" class="text-decoration-none" style="color: #000;">Quên mật khẩu?</a>
         </p>
     </div>
 </div>

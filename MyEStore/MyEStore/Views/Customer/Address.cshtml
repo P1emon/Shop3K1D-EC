@@ -7,35 +7,79 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4>Địa chỉ nhận hàng</h4>
+            <div class="card shadow-lg rounded-3">
+                <div class="card-header bg-gradient text-white text-center">
+                    <h4>Thông tin địa chỉ nhận hàng</h4>
                 </div>
                 <div class="card-body">
                     <form asp-action="UpdateAddress" method="post">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
                             <label for="HoTen" class="form-label">Tên khách hàng</label>
-                            <input type="text" class="form-control" id="HoTen" name="hoTen" value="@Model.HoTen" required />
+                            <input type="text" class="form-control rounded-pill" id="HoTen" name="hoTen" value="@Model.HoTen" required />
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
                             <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" id="SoDienThoai" name="soDienThoai" value="@Model.DienThoai" required />
+                            <input type="text" class="form-control rounded-pill" id="SoDienThoai" name="soDienThoai" value="@Model.DienThoai" required />
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
                             <label for="DiaChi" class="form-label">Địa chỉ nhận hàng</label>
-                            <textarea class="form-control" id="DiaChi" name="diaChi" rows="3" required>@Model.DiaChi</textarea>
+                            <textarea class="form-control rounded-3" id="DiaChi" name="diaChi" rows="3" required>@Model.DiaChi</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Lưu lại</button>
+                        <button type="submit" class="btn btn-lg btn-primary w-100 shadow-sm mt-3">Lưu lại</button>
                     </form>
 
                     @if (TempData["Success"] != null)
                     {
-                            <div class="alert alert-success mt-3">
-                                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
-                            </div>
+                        <div class="alert alert-success mt-4 alert-dismissible fade show">
+                            <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Add custom styling -->
+<style>
+    .bg-gradient {
+        background: linear-gradient(to right, #007bff, #00d4ff);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transition: background-color 0.3s;
+    }
+
+    .card-header {
+        background-color: #0069d9;
+        border-radius: 25px 25px 0 0;
+    }
+
+    .card-body {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 0 0 25px 25px;
+    }
+
+    .alert {
+        font-size: 16px;
+        border-radius: 10px;
+    }
+</style>

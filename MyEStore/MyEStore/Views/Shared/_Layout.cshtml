@@ -13,89 +13,53 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <!-- Logo -->
                 <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-shop"></i> MyEStore
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <!-- Navbar Links -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <!-- Dropdown Category -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Danh mục
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
                             <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                                 @await Component.InvokeAsync("Loai")
                             </ul>
                         </li>
-
-                        <!-- Home Link -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Trang chủ</a>
                         </li>
                     </ul>
-
-                    <!-- Right-side links -->
                     <ul class="navbar-nav">
-                        <!-- Cart Icon -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
                                 <i class="bi bi-cart"></i> Giỏ hàng
                                 <span class="badge bg-danger" id="cart-count">0</span>
                             </a>
                         </li>
-                     
-                        <!-- User Auth Links -->
                         @if (User.Identity.IsAuthenticated)
                         {
-                                <!-- Profile Dropdown -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Chào <b>@User.Identity.Name</b>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                        <li>
-                                            <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Profile">
-                                                <i class="bi bi-person-circle"></i> Cập nhật hồ sơ
-                                            </a>
-                                        </li>
-                                        <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="TransactionHistory">
-                                                <i class="bi bi-bag-check"></i> Đơn hàng từng mua
-                                            </a>
-                                        </li>
-                                        <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Address">
-                                                <i class="bi bi-geo-alt-fill"></i> Địa chỉ nhận hàng
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Preferences">
-                                                <i class="bi bi-bell"></i> Thông báo
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item text-danger" asp-area="" asp-controller="Customer" asp-action="Logout">
-                                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Chào <b>@User.Identity.Name</b></a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Profile"><i class="bi bi-person-circle"></i> Cập nhật hồ sơ</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="TransactionHistory"><i class="bi bi-bag-check"></i> Đơn hàng từng mua</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Address"><i class="bi bi-geo-alt-fill"></i> Địa chỉ nhận hàng</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                                            <i class="bi bi-bell"></i> Thông báo
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" asp-area="" asp-controller="Customer" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a></li>
+                                </ul>
+                            </li>
                         }
                         else
                         {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Register">Đăng ký</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Login">Đăng nhập</a>
-                                </li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Register">Đăng ký</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Login">Đăng nhập</a></li>
                         }
                     </ul>
                 </div>
@@ -105,34 +69,37 @@
 
     @RenderSection("Scripts", required: false)
 
-    <!-- Main Content -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-        <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/675ac85349e2fd8dfef6ebb8/1iet9t21o';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
-    <!-- Footer -->
+
+    <!-- Modal Alert -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title" id="notificationModalLabel"><i class="bi bi-exclamation-circle"></i> Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Chức năng "Thông báo" hiện đang được cập nhật. Vui lòng quay lại sau!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="border-top footer text-muted bg-dark text-white mt-4">
         <div class="container text-center py-3">
             &copy; 2024 - MyEStore - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-light">Privacy</a>
         </div>
     </footer>
 
-    <!-- JavaScript files -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- For Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>

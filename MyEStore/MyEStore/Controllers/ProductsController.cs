@@ -15,41 +15,38 @@ namespace MyEStore.Controllers
             _ctx = ctx;
         }
 
-        // Tạo slug cho URL thân thiện
-        public IActionResult Detail(int id, string slug)
+        [HttpGet("san-pham/{categorySlug}/{productSlug}")]
+        public IActionResult Detail(string categorySlug, string productSlug)
         {
-            var hangHoa = _ctx.HangHoas.SingleOrDefault(p => p.MaHh == id);
+            // Lấy sản phẩm từ slug
+            var hangHoa = _ctx.HangHoas.SingleOrDefault(p => p.TenAlias == productSlug);
             if (hangHoa == null)
             {
                 return NotFound();
             }
 
+            // Kiểm tra slug của danh mục để đảm bảo URL đúng
             var loai = _ctx.Loais.SingleOrDefault(l => l.MaLoai == hangHoa.MaLoai);
             if (loai == null)
             {
                 return NotFound();
             }
 
-            // Tạo slug mong đợi từ Loai và HangHoa
-            var expectedSlug = SlugHelper.GenerateSlug(loai.TenLoaiAlias + "/-" + hangHoa.TenAlias);
+            var expectedCategorySlug = SlugHelper.GenerateSlug(loai.TenLoaiAlias);
 
-            // Kiểm tra slug trong URL và so sánh với expectedSlug
-            if (slug != expectedSlug)
+            // Nếu categorySlug không khớp, chuyển hướng đến URL chính xác
+            if (categorySlug != expectedCategorySlug)
             {
-                return RedirectToActionPermanent("Detail", "Products", new { id = hangHoa.MaHh, slug = expectedSlug });
+                return RedirectToActionPermanent("Detail", new { categorySlug = expectedCategorySlug, productSlug });
             }
 
-            // Truyền slug qua ViewData
-            ViewData["ExpectedSlug"] = expectedSlug;
-
-            // Truyền dữ liệu hình ảnh
-            var imageUrl = "~/Hinh/HangHoa/" + hangHoa.Hinh;
-            ViewData["ImageUrl"] = imageUrl;
+            // Truyền slug hình ảnh và các thông tin cần thiết vào ViewData
+            ViewData["ImageUrl"] = "~/Hinh/HangHoa/" + hangHoa.Hinh;
 
             return View(hangHoa);
         }
 
-        public IActionResult Index(int? cateid)
+        public IActionResult Index(int? cateid, int page = 1, int pageSize = 10)
         {
             var data = _ctx.HangHoas.AsQueryable();
 
@@ -72,16 +69,52 @@ namespace MyEStore.Controllers
                 ViewData["Title"] = "Danh sách hàng hóa";
             }
 
-            // Chuẩn bị dữ liệu ViewModel
-            var result = data.Select(hh => new HangHoaVM
-            {
-                MaHh = hh.MaHh,
-                TenHh = hh.TenHh,
-                DonGia = hh.DonGia ?? 0,
-                Hinh = hh.Hinh
-            });
+            // Tổng số sản phẩm
+            int totalItems = data.Count();
+
+            // Lấy dữ liệu phân trang
+            var result = data
+                .OrderBy(hh => hh.MaHh) // Sắp xếp theo mã sản phẩm (hoặc thuộc tính khác)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(hh => new HangHoaVM
+                {
+                    MaHh = hh.MaHh,
+                    TenHh = hh.TenHh,
+                    TenAlias = hh.TenAlias,
+                    DonGia = hh.DonGia ?? 0,
+                    Hinh = hh.Hinh
+                }).ToList();
+
+            // Truyền thêm dữ liệu phân trang
+            ViewData["CurrentPage"] = page;
+            ViewData["TotalPages"] = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewData["CateId"] = cateid; // Truyền cateid để giữ nguyên danh mục
 
             return View(result);
         }
+
+        public IActionResult Search(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var results = _ctx.HangHoas
+                .Where(hh => hh.TenHh.Contains(query) || hh.TenAlias.Contains(query))
+                .Select(hh => new HangHoaVM
+                {
+                    MaHh = hh.MaHh,
+                    TenHh = hh.TenHh,
+                    TenAlias = hh.TenAlias,
+                    DonGia = hh.DonGia ?? 0,
+                    Hinh = hh.Hinh
+                }).ToList();
+
+            ViewData["Title"] = $"Kết quả tìm kiếm cho '{query}'";
+            return View("Index", results);
+        }
+
     }
 }

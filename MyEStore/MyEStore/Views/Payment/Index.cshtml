@@ -81,17 +81,40 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+    // Lấy ngày hiện tại
+    function getToday() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt giờ phút giây về 0
+        return today;
+    }
+
+    // Kiểm tra ngày giao hàng phải lớn hơn hoặc bằng ngày hôm nay
+    function isFutureDate(date) {
+        const selectedDate = new Date(date);
+        return selectedDate >= getToday(); // Ngày phải lớn hơn hoặc bằng hôm nay
+    }
+
+    // Kiểm tra ngày giao hàng trước khi gửi đơn hàng VNPay
     document.querySelector('form[action="/Payment/VnpayOrder"]').addEventListener('submit', function (e) {
         const ngayGiao = document.getElementById('ngayGiao').value;
-        if (!ngayGiao) {
-            alert("Vui lòng chọn ngày giao hàng.");
+        if (!ngayGiao || !isFutureDate(ngayGiao)) {
             e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: 'Vui lòng chọn một ngày giao hàng trong tương lai.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
         } else {
             this.querySelector('[name="ngayGiao"]').value = ngayGiao;
         }
     });
 
+    // Kiểm tra ngày giao hàng trước khi gửi đơn hàng qua PayPal
     paypal.Buttons({
         style: {
             layout: 'horizontal',
@@ -101,8 +124,14 @@
         },
         createOrder: (data, actions) => {
             const ngayGiao = document.getElementById('ngayGiao').value;
-            if (!ngayGiao) {
-                alert("Vui lòng chọn ngày giao hàng.");
+            if (!ngayGiao || !isFutureDate(ngayGiao)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Vui lòng chọn một ngày giao hàng trong tương lai.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33'
+                });
                 return;
             }
             return fetch("/Payment/PaypalOrder", {
@@ -120,8 +149,26 @@
             return fetch(`/Payment/PaypalCapture?orderId=${data.orderID}&ngayGiao=${ngayGiao}`, {
                 method: "POST"
             })
-                .then(() => window.location.href = "/Payment/Success")
-                .catch(err => alert(err.message));
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: 'Đơn hàng của bạn đã được thanh toán thành công.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => {
+                        window.location.href = "/Payment/Success";
+                    });
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Thất bại!',
+                        text: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    });
+                });
         }
     }).render('#paypal-button-container');
 </script>

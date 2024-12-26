@@ -1,51 +1,52 @@
 ﻿@using MyEStore.Helpers
 @model MyEStore.Entities.HangHoa
-@Html.Partial("livechat") 
+@Html.Partial("livechat")
 @{
     var expectedSlug = ViewData["ExpectedSlug"] as string;
     var imageUrl = ViewData["ImageUrl"] as string;
 }
 
- <!-- Thẻ Open Graph -->
-    <meta property="og:title" content="@Model.TenHh" />
-    <meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N0") đ" />
-    <meta property="og:image" content="@Url.Content(ViewData["ImageUrl"] as string)" />
-    <meta property="og:url" content="@Url.Action("Detail", "Products", new { slug = ViewData["ExpectedSlug"] })" />
-    <meta property="og:type" content="product" />
+<!-- Thẻ Open Graph -->
+<meta property="og:title" content="@Model.TenHh" />
+<meta property="og:description" content="Thông tin sản phẩm: @Model.TenHh - Giá: @Decimal.Parse(@Model.DonGia.ToString()).ToString("N0") đ" />
+<meta property="og:image" content="@Url.Content(ViewData["ImageUrl"] as string)" />
+<meta property="og:url" content="@Url.Action("Detail", "Products", new { slug = ViewData["ExpectedSlug"] })" />
+<meta property="og:type" content="product" />
 
 <link rel="stylesheet" href="~/css/PDetail.css" />
 
 <div class="container py-5">
-    <div class="card shadow-lg border-0" style="max-width: 900px; margin: auto; overflow: hidden;">
+    <div class="card shadow-lg border-0" style="max-width: 900px; margin: auto; overflow: hidden; border-radius: 15px;">
         <div class="row g-0">
-            <!-- Image Section -->
-            <div class="col-md-5">
+            <!-- Phần Hình Ảnh -->
+            <div class="col-md-5" style="background: #f8f9fa;">
                 <img src="@Url.Content(imageUrl)" alt="@Model.TenHh" class="img-fluid rounded-start" style="object-fit: cover; height: 100%; max-height: 400px;">
             </div>
 
-            <!-- Product Details -->
+            <!-- Thông Tin Sản Phẩm -->
             <div class="col-md-7">
                 <div class="card-body">
-                    <h1 class="card-title fw-bold mb-3">@Model.TenHh</h1>
-                    <h2 class="text-danger fw-bold mb-4">
+                    <h1 class="card-title fw-bold mb-3" style="font-size: 1.8rem;">@Model.TenHh</h1>
+                    <h2 class="text-danger fw-bold mb-4" style="font-size: 1.5rem;">
                         @Decimal.Parse(@Model.DonGia.ToString()).ToString("N0") đ
                     </h2>
 
-                    <p class="card-text text-muted">
+                    <p class="card-text text-muted" style="line-height: 1.8; font-size: 1rem;">
                         @Model.MoTa
                     </p>
 
-                    <!-- Add to Cart Form -->
+                    <!-- Form Thêm Vào Giỏ Hàng -->
                     <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.MaHh" class="mt-4">
                         <div class="d-flex align-items-center">
-                            <label for="qty" class="me-3 fw-bold">Quantity:</label>
+                            <label for="qty" class="me-3 fw-bold">Số lượng:</label>
                             <input type="number" name="qty" value="1" min="1" class="form-control me-3" style="width: 80px;">
-                            <button class="btn btn-dark btn-lg">Add to Cart</button>
+                            <button class="btn btn-primary btn-lg" style="background: #1d3557; border: none;">Thêm vào giỏ</button>
                         </div>
                     </form>
 
-                    <!-- Nút chia sẻ -->
-                    <div class="social-share mt-3">
+                    <!-- Nút Chia Sẻ -->
+                    <div class="social-share mt-4">
+                        <p class="fw-bold mb-2">Chia sẻ sản phẩm:</p>
                         <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
                             <a class="a2a_button_facebook"></a>
                             <a class="a2a_button_twitter"></a>
@@ -60,3 +61,57 @@
 </div>
 
 <script async src="https://static.addtoany.com/menu/page.js"></script>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        color: #333333;
+    }
+
+    .text-danger {
+        color: #e63946 !important;
+    }
+
+    .btn-primary {
+        background-color: #1d3557;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #457b9d;
+        }
+
+    .social-share .a2a_button_facebook {
+        background: #3b5998;
+        border-radius: 50%;
+    }
+
+    .social-share .a2a_button_twitter {
+        background: #1da1f2;
+        border-radius: 50%;
+    }
+
+    .social-share .a2a_button_pinterest {
+        background: #bd081c;
+        border-radius: 50%;
+    }
+
+    .social-share .a2a_button_whatsapp {
+        background: #25d366;
+        border-radius: 50%;
+    }
+</style>

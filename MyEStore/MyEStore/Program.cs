@@ -64,11 +64,21 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Products}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "productDetail",
+        pattern: "san-pham/{categorySlug}/{productSlug}",
+        defaults: new { controller = "Products", action = "Detail" });
+
+    endpoints.MapDefaultControllerRoute();
+});
 app.MapControllerRoute(
-    name: "product-detail",
-    pattern: "{tenLoaiAlias}/{tenAlias}",
-    defaults: new { controller = "Products", action = "Detail" });
+    name: "search",
+    pattern: "tim-kiem",
+    defaults: new { controller = "Products", action = "Search" });
+
 
 app.Run();

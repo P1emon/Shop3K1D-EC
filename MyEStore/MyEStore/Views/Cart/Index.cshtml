@@ -5,22 +5,105 @@
 }
 
 <style>
-    /* Đảm bảo footer nằm cố định ở dưới cùng */
-    .footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #343a40;
-        color: #fff;
-        font-weight: bold;
-        padding: 1rem 0;
-        z-index: 1000;
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #ffffff;
+        color: #333;
+        margin: 0;
+        padding: 0;
     }
 
     .container {
         padding-bottom: 100px; /* Khoảng cách dưới để tránh footer che khuất */
     }
 
+    h1 {
+        color: #222;
+        font-weight: bold;
+    }
+
+    .table {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table thead {
+            background-color: #000;
+            color: #fff;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .btn-primary {
+        background-color: #222;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #444;
+        }
+
+    .btn-danger {
+        background-color: #d9534f;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #000;
+        color: #fff;
+        font-weight: bold;
+        padding: 1rem 0;
+        z-index: 1000;
+        text-align: center;
+    }
+
+    .alert-info {
+        background-color: #f9f9f9;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    input[type="number"] {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+        width: 70px;
+        text-align: center;
+    }
 </style>
 
 <div class="container py-5">
@@ -28,80 +111,88 @@
 
     @if (!Model.Any())
     {
-            <div class="alert alert-info text-center" role="alert">
-                <i class="bi bi-cart-x fs-1"></i>
-                <p class="mt-3">Giỏ hàng của bạn đang trống.</p>
-                <a href="/" class="btn btn-primary mt-3">
-                    <i class="bi bi-shop"></i> Tiếp tục mua sắm
-                </a>
-            </div>
+        <div class="alert alert-info text-center" role="alert">
+            <i class="bi bi-cart-x fs-1"></i>
+            <p class="mt-3">Giỏ hàng của bạn đang trống.</p>
+            <a href="/" class="btn btn-primary mt-3">
+                <i class="bi bi-shop"></i> Tiếp tục mua sắm
+            </a>
+        </div>
     }
     else
     {
-            <div class="table-responsive shadow-sm">
-                <table class="table table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="text-center">Hình ảnh</th>
-                            <th scope="col">Sản phẩm</th>
-                            <th scope="col" class="text-end">Đơn giá</th>
-                            <th scope="col" class="text-center">Số lượng</th>
-                            <th scope="col" class="text-end">Thành tiền</th>
-                            <th scope="col" class="text-center">Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-items">
+        <div class="table-responsive shadow-sm">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">Hình ảnh</th>
+                        <th scope="col">Sản phẩm</th>
+                        <th scope="col" class="text-end">Đơn giá</th>
+                        <th scope="col" class="text-center">Số lượng</th>
+                        <th scope="col" class="text-end">Thành tiền</th>
+                        <th scope="col" class="text-center">Xóa</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
                     @foreach (var item in Model)
                     {
-                                <tr data-id="@item.MaHh">
-                                    <td class="text-center">
-                                        <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="max-height: 80px;" />
-                                    </td>
-                                    <td>@item.TenHh</td>
-                                    <td class="text-end">@item.DonGia.ToString("N0") đ</td>
-                                    <td class="text-center">
-                                        <input type="number" value="@item.SoLuong" min="1" class="form-control text-center quantity" style="max-width: 70px;" data-id="@item.MaHh" />
-                                    </td>
-                                    <td class="text-end total-price" data-id="@item.MaHh">@item.ThanhTien.ToString("N0") đ</td>
-                                    <td class="text-center">
-                                        <a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                    }
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
-                            <td class="text-end fw-bold" id="total-price">@Model.Sum(item => item.ThanhTien).ToString("N0") đ</td>
-                            <td></td>
+                        <tr data-id="@item.MaHh">
+                            <td class="text-center">
+                                <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" class="img-thumbnail" style="max-height: 80px;" />
+                            </td>
+                            <td>@item.TenHh</td>
+                            <td class="text-end">@item.DonGia.ToString("N0") đ</td>
+                            <td class="text-center">
+                                <input type="number" value="@item.SoLuong" min="1" class="form-control text-center quantity" style="max-width: 70px;" data-id="@item.MaHh" />
+                            </td>
+                            <td class="text-end total-price" data-id="@item.MaHh">@item.ThanhTien.ToString("N0") đ</td>
+                            <td class="text-center">
+                                <a asp-action="RemoveCartItem" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
                         </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="text-end mt-4">
-                <a asp-action="Index" asp-controller="Payment" class="btn btn-success btn-lg">
-                    <i class="bi bi-credit-card"></i> Thanh toán
-                </a>
-            </div>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
+                        <td class="text-end fw-bold" id="total-price">@Model.Sum(item => item.ThanhTien).ToString("N0") đ</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="text-end mt-4">
+            <a asp-action="Index" asp-controller="Payment" class="btn btn-success btn-lg">
+                <i class="bi bi-credit-card"></i> Thanh toán
+            </a>
+        </div>
     }
 </div>
 
-<footer class="footer text-center">
+<footer class="footer">
     © 2024 MyEStore - All rights reserved.
 </footer>
-
 <script>
-    // Handle quantity change and update total price via AJAX
+    // Xử lý khi thay đổi số lượng sản phẩm
     document.querySelectorAll('.quantity').forEach(input => {
-        input.addEventListener('change', function() {
+        input.addEventListener('change', function () {
             var itemId = this.getAttribute('data-id');
             var newQuantity = parseInt(this.value);
 
-            if (newQuantity < 1) return;
+            // Kiểm tra số lượng tối thiểu
+            if (newQuantity < 1) {
+                this.value = 1; // Đặt lại giá trị thành 1 nếu số lượng nhỏ hơn
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cảnh báo',
+                    text: 'Số lượng không được nhỏ hơn 1!',
+                });
+                return;
+            }
 
-            // Update the cart with the new quantity using AJAX
+            // Gửi AJAX để cập nhật giỏ hàng
             fetch('/Cart/UpdateQuantity', {
                 method: 'POST',
                 headers: {
@@ -109,15 +200,50 @@
                 },
                 body: JSON.stringify({ id: itemId, qty: newQuantity })
             })
-            .then(response => response.json())
-            .then(data => {
-                // Update the total price for this item
-                const totalPriceElement = document.querySelector(`.total-price[data-id='${itemId}']`);
-                totalPriceElement.innerText = data.newItemTotalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                .then(response => response.json())
+                .then(data => {
+                    // Cập nhật thành tiền cho sản phẩm
+                    const totalPriceElement = document.querySelector(`.total-price[data-id='${itemId}']`);
+                    totalPriceElement.innerText = data.newItemTotalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
-                // Update the total price of the cart
-                const cartTotalElement = document.getElementById('total-price');
-                cartTotalElement.innerText = data.cartTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                    // Cập nhật tổng tiền giỏ hàng
+                    const cartTotalElement = document.getElementById('total-price');
+                    cartTotalElement.innerText = data.cartTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cập nhật thành công!',
+                        text: 'Số lượng sản phẩm đã được thay đổi.',
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Không thể cập nhật số lượng. Vui lòng thử lại.',
+                    });
+                });
+        });
+    });
+
+    // Xử lý khi xóa sản phẩm
+    document.querySelectorAll('a[asp-action="RemoveCartItem"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: 'Sản phẩm sẽ bị xóa khỏi giỏ hàng!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
             });
         });
     });

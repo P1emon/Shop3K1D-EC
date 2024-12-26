@@ -1,271 +1,424 @@
 ﻿@using MyEStore.Helpers
-@using MyEStore.Controllers
 @model IEnumerable<MyEStore.Models.HangHoaVM>
 @Html.Partial("livechat")
+
 @{
     ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
     var siteUrl = ViewContext.HttpContext.Request.Scheme + "://" + ViewContext.HttpContext.Request.Host;
 }
 
 <meta property="og:title" content="@ViewData["Title"]" />
-<meta property="og:description" content="Khám phá danh sách hàng hóa tại MyStore" />
+<meta property="og:description" content="Khám phá các sản phẩm đa dạng tại MyStore. Chúng tôi cung cấp những sản phẩm chất lượng cao, giá tốt, phù hợp với nhu cầu của mọi khách hàng." />
 <meta property="og:image" content="@Url.Content("~/images/default-og-image.jpg")" />
 <meta property="og:url" content="@siteUrl" />
 <meta property="og:type" content="website" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-
 <link rel="stylesheet" href="~/css/PHome.css" />
 
-<style type="text/css">
-    #slide-bar {
-        visibility: hidden; /* Ẩn hoàn toàn slide bar */
-        left: -350px; /* Đảm bảo slide ra bên ngoài màn hình */
-        position: fixed;
-        top: 0;
-        width: 350px;
-        height: 100%;
-        background: radial-gradient(circle, #1e3c72, #2a5298);
-        box-shadow: 10px 0 25px rgba(0, 0, 0, 0.6);
-        transition: left 0.4s ease-in-out, visibility 0s 0.4s;
-        z-index: 1300;
-        display: flex;
-        flex-direction: column;
-        padding: 40px;
-        overflow: hidden;
-        border-top-right-radius: 25px;
-        border-bottom-right-radius: 25px;
-    }
+<h1 class="page-title">@ViewData["Title"]</h1>
 
-        #slide-bar.active {
-            visibility: visible; /* Hiện ra khi cần */
-            left: 0; /* Đưa vào vị trí hiển thị */
-            transition: left 0.4s ease-in-out;
-        }
-
-
-        #slide-bar h2 {
-            font-size: 30px;
-            font-weight: 800;
-            color: #ffffff;
-            text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            border-bottom: 3px solid #4ac1ff;
-            padding-bottom: 10px;
-        }
-
-        #slide-bar .indicates-required {
-            font-size: 14px;
-            color: #f0f8ff;
-        }
-
-        #slide-bar .mc-field-group label {
-            font-size: 16px;
-            color: #ffffff;
-        }
-
-        #slide-bar input[type="email"] {
-            padding: 14px 20px;
-            border: 1px solid #3a87bd;
-            border-radius: 10px;
-            outline: none;
-            font-size: 16px;
-            width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-            #slide-bar input[type="email"]:focus {
-                box-shadow: 0 0 15px #4ac1ff;
-                border-color: #4ac1ff;
-            }
-
-        #slide-bar button {
-            padding: 15px;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            background: linear-gradient(to right, #3a87bd, #4ac1ff);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: transform 0.4s, box-shadow 0.3s;
-        }
-
-            #slide-bar button:hover {
-                transform: scale(1.08);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            }
-
-    #slide-close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        font-size: 22px;
-        color: #ffffff;
-        cursor: pointer;
-        background: rgba(0, 0, 0, 0.3);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        line-height: 40px;
-        transition: background 0.4s, transform 0.4s;
-    }
-
-        #slide-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(360deg);
-        }
-
-    #open-slide {
-        position: fixed;
-        top: 50%;
-        left: 15px;
-        background: linear-gradient(to right, #4ac1ff, #3a87bd);
-        color: #ffffff;
-        padding: 16px 24px;
-        font-size: 16px;
-        border: none;
-        border-radius: 35px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        #open-slide:hover {
-            background: linear-gradient(to left, #3a87bd, #4ac1ff);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-        }
-
-</style>
-<div id="main-container">
-    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
-    <div id="slide-bar">
-        <button id="slide-close">&times;</button>
-        <h2>Ưu đãi đặc biệt!</h2>
-        <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" onsubmit="handleSubscribe(event)">
-            <div class="mc-field-group">
-                <label for="mce-EMAIL">Email của bạn<span class="asterisk">*</span></label>
-                <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email của bạn" required>
-            </div>
-            <button type="submit" id="mc-embedded-subscribe" class="button">Đăng ký ngay</button>
-        </form>
-    </div>
-
-    <button id="open-slide" onclick="openSlideBar()" title="Đăng ký để nhận ưu đãi ngay">
-        <i class="fas fa-tag"></i> Ưu đãi
+<form method="get" asp-action="Search" asp-controller="Products" class="search-container">
+    <input type="text" name="query" class="search-input" placeholder="Nhập từ khóa tìm kiếm..." />
+    <button type="submit" class="search-button">
+        <i class="fas fa-search"></i>
     </button>
+</form>
 
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function openSlideBar() {
-        alert('Slide bar opened!');
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        slideBar.classList.remove('active'); // Đảm bảo slide-bar bị ẩn ngay lập tức
-    });
-
-    // Hiển thị hoặc ẩn thanh trượt
-    const slideBar = document.getElementById('slide-bar');
-    const closeButton = document.getElementById('slide-close');
-
-    function openSlideBar() {
-        slideBar.classList.add('active');
-    }
-
-    closeButton.addEventListener('click', () => {
-        slideBar.classList.remove('active');
-    });
-
-    // Xử lý logic đăng ký Mailchimp
-    async function handleSubscribe(event) {
-        event.preventDefault(); // Ngăn form tải lại hoặc chuyển hướng
-
-        const form = event.target;
-        const emailInput = document.getElementById('mce-EMAIL').value;
-
-        if (!emailInput) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi!',
-                text: 'Email không được để trống!',
-            });
-            return;
-        }
-
-        const formData = new FormData(form);
-        const mailchimpUrl = 'https://gmail.us12.list-manage.com/subscribe/post?u=f5d09299c989c215c0ba0e855&id=f333cca46f&f_id=00d343e0f0';
-
-
-
-        try {
-            const response = await fetch(mailchimpUrl, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors',
-            });
-
-            // Giả sử mọi yêu cầu luôn thành công (do Mailchimp hạn chế trả về phản hồi CORS)
-            Swal.fire({
-                icon: 'success',
-                title: 'Đăng ký thành công!',
-                text: 'Cảm ơn bạn đã đăng ký, chúng tôi sẽ liên lạc sớm!',
-            });
-
-            form.reset(); // Reset form sau khi gửi
-            slideBar.classList.remove('active'); // Đóng thanh trượt
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Đã có lỗi xảy ra!',
-                text: 'Không thể hoàn tất đăng ký, vui lòng thử lại.',
-            });
-        }
-    }
-</script>
-
-
-
-<h1>@ViewData["Title"]</h1>
-
-<div class="container">
+<!-- Danh sách sản phẩm -->
+<div class="product-container">
     @foreach (var hh in Model)
     {
-        <div class="hh-box">
+        <div class="product-card">
             <!-- Ảnh sản phẩm -->
-            <a asp-action="Detail" asp-route-id="@hh.MaHh" asp-route-slug="@SlugHelper.GenerateSlug(hh.TenHh)">
-                <img src="~/Hinh/Hanghoa/@hh.Hinh" alt="@hh.TenHh - hình ảnh sản phẩm" />
-            </a>
+            <div class="product-image">
+                <a asp-action="Detail" asp-route-categorySlug="@SlugHelper.GenerateSlug(hh.TenAlias)" asp-route-productSlug="@SlugHelper.GenerateSlug(hh.TenAlias)">
+                    <img src="~/Hinh/Hanghoa/@hh.Hinh" alt="@hh.TenHh" />
+                </a>
+            </div>
 
             <!-- Thông tin sản phẩm -->
-            <div class="hh-box-content">
-                <div class="hh-box-title">@hh.TenHh</div>
-                <div class="hh-box-gia">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N0") VND</div>
-                <a class="hh-box-mua" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@hh.MaHh">Mua ngay</a>
-
-                <!-- Nút chia sẻ -->
-                <div class="social-share mt-3">
-                    <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-                        <a class="a2a_button_facebook"></a>
-                        <a class="a2a_button_twitter"></a>
-                    </div>
-                </div>
+            <div class="product-info">
+                <h2 class="product-name">@hh.TenHh</h2>
+                <p class="product-price">@Decimal.Parse(@hh.DonGia.ToString()).ToString("N0") VND</p>
+                <a class="buy-now-button" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@hh.MaHh">
+                    Mua ngay
+                </a>
             </div>
         </div>
     }
 </div>
 
-<script async src="https://static.addtoany.com/menu/page.js"></script>
+<div class="pagination">
+    <ul>
+        @if (ViewData["TotalPages"] != null && (int)ViewData["TotalPages"] > 1)
+        {
+            int currentPage = (int)ViewData["CurrentPage"];
+            int totalPages = (int)ViewData["TotalPages"];
+            int? cateid = ViewData["CateId"] as int?;
+
+            @if (currentPage > 1)
+            {
+                <li>
+                    <a asp-action="Index" asp-route-cateid="@(cateid)" asp-route-page="@(currentPage - 1)">«</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="@(i == currentPage ? "active" : "")">
+                    <a asp-action="Index" asp-route-cateid="@(cateid)" asp-route-page="@i">@i</a>
+                </li>
+            }
+
+            @if (currentPage < totalPages)
+            {
+                <li>
+                    <a asp-action="Index" asp-route-cateid="@(cateid)" asp-route-page="@(currentPage + 1)">»</a>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+
+
+<!-- Overlay để phát hiện click -->
+<div id="overlay"></div>
+
+<!-- Thanh trượt ưu đãi -->
+<div id="promo-slide-bar">
+    <h2>Ưu đãi đặc biệt!</h2>
+    <form id="promo-form" onsubmit="handleSubscribe(event)">
+        <label for="email">Email của bạn:</label>
+        <input type="email" id="email" placeholder="Nhập email để nhận ưu đãi" required />
+        <button type="submit">Đăng ký ngay</button>
+    </form>
+</div>
+
+<!-- Nút Nhận ưu đãi -->
+<button id="open-promo-slide">Nhận ưu đãi!</button>
+
+<!-- CSS -->
+<style>
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px auto; /* Canh giữa */
+        width: 80%; /* Chiều rộng tối đa */
+        max-width: 600px; /* Giới hạn chiều rộng */
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        padding: 5px 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 20px;
+    }
+
+    .search-button {
+        background-color: #222;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .search-button:hover {
+            background-color: #444;
+        }
+
+    .fa-search {
+        font-size: 16px;
+    }
+
+
+    /* Pagination */
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center; /* Canh giữa các số trang */
+        align-items: center; /* Căn giữa theo chiều dọc nếu cần */
+    }
+
+        .pagination ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .pagination li {
+            display: inline;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #222;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+            .pagination a:hover {
+                background: #222;
+                color: #fff;
+            }
+
+        .pagination .active a {
+            background: #222;
+            color: #fff;
+            pointer-events: none;
+        }
+
+
+    /* General */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20px 0;
+        color: #222;
+    }
+
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .product-card {
+        background: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 200px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .product-image img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-bottom: 1px solid #ddd;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .buy-now-button {
+        display: inline-block;
+        background: #222;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+        .buy-now-button:hover {
+            background: #444;
+        }
+
+    /* Promotion Slide */
+    #open-promo-slide {
+        background: linear-gradient(to right, #222, #444);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        font-size: 14px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+        margin: 20px auto; /* Canh giữa theo chiều ngang */
+        display: block; /* Đảm bảo nút là khối riêng biệt */
+        text-align: center; /* Căn giữa nội dung trong nút */
+    }
+
+        #open-promo-slide:hover {
+            background: linear-gradient(to right, #444, #666);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+    #promo-slide-bar {
+        position: fixed;
+        top: 0;
+        right: -300px; /* Ẩn thanh trượt khỏi màn hình */
+        width: 300px;
+        height: 100%;
+        background: #1a1a1a;
+        color: #fff;
+        padding: 20px;
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+        transition: right 0.3s ease;
+        z-index: 1002;
+        visibility: hidden; /* Đảm bảo không hiển thị */
+        opacity: 0; /* Đảm bảo thanh trượt trong suốt */
+    }
+
+        #promo-slide-bar.active {
+            right: 0; /* Hiển thị thanh trượt */
+            visibility: visible;
+            opacity: 1;
+            transition: right 0.3s ease, opacity 0.3s ease;
+        }
+
+        #promo-slide-bar h2 {
+            font-size: 20px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #f1c40f;
+        }
+
+        #promo-slide-bar input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            background: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #promo-slide-bar button {
+            background: #27ae60;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            #promo-slide-bar button:hover {
+                background: #2ecc71;
+            }
+
+    /* Overlay */
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+    }
+
+        #overlay.active {
+            display: block;
+        }
+</style>
+
+
+<!-- Thêm thư viện SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const promoSlideBar = document.getElementById('promo-slide-bar');
+    const overlay = document.getElementById('overlay');
+    const openPromoSlide = document.getElementById('open-promo-slide');
+
+    // Mở thanh trượt và hiển thị overlay
+    openPromoSlide.addEventListener('click', () => {
+        promoSlideBar.classList.add('active');
+        overlay.classList.add('active');
+    });
+
+    // Ẩn thanh trượt khi nhấp vào overlay
+    overlay.addEventListener('click', () => {
+        promoSlideBar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // Đảm bảo thanh trượt ẩn khi tải trang
+    window.addEventListener('DOMContentLoaded', () => {
+        promoSlideBar.classList.remove('active');
+    });
+
+    // Xử lý logic đăng ký
+    async function handleSubscribe(event) {
+        event.preventDefault();
+        const emailInput = document.getElementById('email').value;
+
+        if (!emailInput) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: 'Vui lòng nhập email để đăng ký.',
+            });
+            return;
+        }
+
+        // Hiển thị thông báo đăng ký thành công
+        Swal.fire({
+            icon: 'success',
+            title: 'Đăng ký thành công!',
+            text: `Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên lạc qua email: ${emailInput}.`,
+            confirmButtonText: 'OK',
+        });
+
+        // Ẩn thanh trượt và overlay sau khi thông báo
+        promoSlideBar.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+</script>
 
 

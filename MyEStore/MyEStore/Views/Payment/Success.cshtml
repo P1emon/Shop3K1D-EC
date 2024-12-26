@@ -1,27 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Order Successful";
+    ViewData["Title"] = "Đặt Hàng Thành Công";
 }
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #ffffff;">
-    <div class="text-center p-5 rounded shadow-lg" style="background-color: #f8f9fa; max-width: 600px; border: 1px solid #e0e0e0;">
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f0f8ff;">
+    <div class="text-center p-5 rounded shadow-lg" style="background-color: #ffffff; max-width: 600px; border: 1px solid #dcdcdc;">
         <div class="mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#007bff" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#28a745" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.97 11.03a.75.75 0 0 0 1.08 0l3.992-4.992a.75.75 0 1 0-1.14-.976L7.5 9.584 5.614 7.47a.75.75 0 0 0-1.028 1.088l2.384 2.47z" />
             </svg>
         </div>
-        <h1 class="fw-bold" style="color: #007bff;">Order Placed Successfully!</h1>
-        <p class="text-dark mt-3">
-            Thank you for shopping with us. Your order has been successfully placed. We hope you enjoy your experience.
+        <h1 class="fw-bold" style="color: #28a745;">Đặt Hàng Thành Công!</h1>
+        <p class="text-secondary mt-3">
+            Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được đặt thành công. Chúc bạn có một trải nghiệm tuyệt vời!
         </p>
-        <a href="/" class="btn btn-dark btn-lg mt-4 px-5">
-            <i class="bi bi-house-door"></i> Go to Home
+        <a href="/" class="btn btn-success btn-lg mt-4 px-5">
+            <i class="bi bi-house-door"></i> Về Trang Chủ
         </a>
-        <p class="text-muted mt-3">You will be redirected to the home page in <span id="countdown">10</span> seconds.</p>
+        <p class="text-muted mt-3">
+            Bạn sẽ được chuyển về trang chủ sau <span id="countdown">10</span> giây.
+        </p>
     </div>
 </div>
 
 <script>
-    // Countdown timer and auto-redirect
+    // Đồng hồ đếm ngược và tự động chuyển hướng
     let countdown = 10;
     const countdownElement = document.getElementById('countdown');
     const interval = setInterval(() => {

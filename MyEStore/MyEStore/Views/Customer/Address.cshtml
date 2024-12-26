@@ -1,85 +1,361 @@
 ﻿@model MyEStore.Entities.KhachHang
 
 @{
-    ViewData["Title"] = "Manage Shipping Address";
+    ViewData["Title"] = "Quản lý địa chỉ giao hàng";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg rounded-3">
-                <div class="card-header bg-gradient text-white text-center">
-                    <h4>Thông tin địa chỉ nhận hàng</h4>
-                </div>
-                <div class="card-body">
-                    <form asp-action="UpdateAddress" method="post">
-                        <div class="form-group mb-4">
-                            <label for="HoTen" class="form-label">Tên khách hàng</label>
-                            <input type="text" class="form-control rounded-pill" id="HoTen" name="hoTen" value="@Model.HoTen" required />
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control rounded-pill" id="SoDienThoai" name="soDienThoai" value="@Model.DienThoai" required />
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="DiaChi" class="form-label">Địa chỉ nhận hàng</label>
-                            <textarea class="form-control rounded-3" id="DiaChi" name="diaChi" rows="3" required>@Model.DiaChi</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-lg btn-primary w-100 shadow-sm mt-3">Lưu lại</button>
-                    </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000; /* Black */
+            --secondary-color: #fff; /* White */
+            --border-color: #ccc;
+            --text-muted: #6c757d;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success mt-4 alert-dismissible fade show">
-                            <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    }
+        body {
+            background-color: var(--secondary-color);
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--text-muted);
+        }
+
+        .header {
+            background: var(--primary-color);
+            padding: 1.25rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        .form-container {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            margin-top: 2rem;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-control,
+        .form-select {
+            height: 48px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.15);
+            }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            z-index: 2;
+        }
+
+        .form-label {
+            position: absolute;
+            left: 2.5rem;
+            top: -0.5rem;
+            padding: 0 0.25rem;
+            background: var(--secondary-color);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            z-index: 1;
+        }
+
+        .form-select {
+            padding-right: 2rem;
+            background-position: right 0.75rem center;
+            cursor: pointer;
+        }
+
+        .address-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa; /* Light gray background for preview */
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+            .address-preview p {
+                margin: 0;
+                color: var(--text-muted);
+            }
+
+        .btn-submit {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+            .btn-submit:hover {
+                background: #3651d3;
+                transform: translateY(-1px);
+            }
+
+        .alert {
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="form-container">
+                    <div class="header">
+                        <h4 class="text-white text-center m-0">
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+                            Thông tin địa chỉ nhận hàng
+                        </h4>
+                    </div>
+
+                    <div class="form-content">
+                        <form id="addressForm" asp-action="UpdateAddress" method="post">
+                            <!-- Tên khách hàng -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-person-fill input-icon"></i>
+                                    <label class="form-label">Tên khách hàng</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="HoTen"
+                                           name="hoTen"
+                                           value="@Model.HoTen"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Số điện thoại -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-telephone-fill input-icon"></i>
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel"
+                                           class="form-control"
+                                           id="SoDienThoai"
+                                           name="soDienThoai"
+                                           value="@Model.DienThoai"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Tỉnh/Thành phố -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-geo-alt input-icon"></i>
+                                    <label class="form-label">Tỉnh/Thành phố</label>
+                                    <select class="form-select" id="province" name="province" required>
+                                        <option value="">Chọn Tỉnh/Thành phố</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Quận/Huyện -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-geo-alt input-icon"></i>
+                                    <label class="form-label">Quận/Huyện</label>
+                                    <select class="form-select" id="district" name="district" required>
+                                        <option value="">Chọn Quận/Huyện</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Phường/Xã -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-geo-alt input-icon"></i>
+                                    <label class="form-label">Phường/Xã</label>
+                                    <select class="form-select" id="ward" name="ward" required>
+                                        <option value="">Chọn Phường/Xã</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Địa chỉ cụ thể -->
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <i class="bi bi-house-fill input-icon"></i>
+                                    <label class="form-label">Địa chỉ cụ thể</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="streetAddress"
+                                           name="streetAddress"
+                                           placeholder="Số nhà, tên đường"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Xem trước địa chỉ -->
+                            <div class="address-preview">
+                                <p class="fw-bold mb-1">Địa chỉ đầy đủ:</p>
+                                <p id="fullAddress">Vui lòng nhập thông tin địa chỉ</p>
+                                <input type="hidden" id="DiaChi" name="diaChi" value="@Model.DiaChi">
+                            </div>
+
+                            <!-- Nút submit -->
+                            <button type="submit" class="btn btn-submit text-white w-100 mt-4">
+                                <i class="bi bi-check2-circle me-2"></i>
+                                Lưu thông tin
+                            </button>
+                        </form>
+
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                @TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Add custom styling -->
-<style>
-    .bg-gradient {
-        background: linear-gradient(to right, #007bff, #00d4ff);
-    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = document.getElementById('province');
+            const districtSelect = document.getElementById('district');
+            const wardSelect = document.getElementById('ward');
+            const streetAddressInput = document.getElementById('streetAddress');
+            const fullAddressDisplay = document.getElementById('fullAddress');
+            const diaChiInput = document.getElementById('DiaChi');
 
-    .form-label {
-        font-weight: 600;
-        color: #333;
-    }
+            // Loading states
+            function setLoading(select, loading) {
+                select.disabled = loading;
+                if (loading) {
+                    select.parentElement.style.opacity = '0.7';
+                } else {
+                    select.parentElement.style.opacity = '1';
+                }
+            }
 
-    .form-control {
-        border-radius: 30px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+            // Fetch provinces
+            async function loadProvinces() {
+                try {
+                    setLoading(provinceSelect, true);
+                    const response = await fetch('https://provinces.open-api.vn/api/p/');
+                    const data = await response.json();
 
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-    }
+                    data.forEach(province => {
+                        const option = new Option(province.name, province.code);
+                        provinceSelect.add(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading provinces:', error);
+                } finally {
+                    setLoading(provinceSelect, false);
+                }
+            }
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-        transition: background-color 0.3s;
-    }
+            // Handle province change
+            provinceSelect.addEventListener('change', async function() {
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
 
-    .card-header {
-        background-color: #0069d9;
-        border-radius: 25px 25px 0 0;
-    }
+                if (this.value) {
+                    try {
+                        setLoading(districtSelect, true);
+                        const response = await fetch(`https://provinces.open-api.vn/api/p/${this.value}?depth=2`);
+                        const data = await response.json();
 
-    .card-body {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 0 0 25px 25px;
-    }
+                        data.districts.forEach(district => {
+                            const option = new Option(district.name, district.code);
+                            districtSelect.add(option);
+                        });
+                    } catch (error) {
+                        console.error('Error loading districts:', error);
+                    } finally {
+                        setLoading(districtSelect, false);
+                    }
+                }
+                updateFullAddress();
+            });
 
-    .alert {
-        font-size: 16px;
-        border-radius: 10px;
-    }
-</style>
+            // Handle district change
+            districtSelect.addEventListener('change', async function() {
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+
+                if (this.value) {
+                    try {
+                        setLoading(wardSelect, true);
+                        const response = await fetch(`https://provinces.open-api.vn/api/d/${this.value}?depth=2`);
+                        const data = await response.json();
+
+                        data.wards.forEach(ward => {
+                            const option = new Option(ward.name, ward.code);
+                            wardSelect.add(option);
+                        });
+                    } catch (error) {
+                        console.error('Error loading wards:', error);
+                    } finally {
+                        setLoading(wardSelect, false);
+                    }
+                }
+                updateFullAddress();
+            });
+
+            // Update full address
+            function updateFullAddress() {
+                const province = provinceSelect.options[provinceSelect.selectedIndex].text;
+                const district = districtSelect.options[districtSelect.selectedIndex].text;
+                const ward = wardSelect.options[wardSelect.selectedIndex].text;
+                const street = streetAddressInput.value.trim();
+
+                let addressParts = [];
+                if (street) addressParts.push(street);
+                if (ward !== 'Chọn Phường/Xã') addressParts.push(ward);
+                if (district !== 'Chọn Quận/Huyện') addressParts.push(district);
+                if (province !== 'Chọn Tỉnh/Thành phố') addressParts.push(province);
+
+                const fullAddress = addressParts.join(', ');
+                fullAddressDisplay.textContent = fullAddress || 'Vui lòng nhập thông tin địa chỉ';
+                diaChiInput.value = fullAddress;
+            }
+
+            // Event listeners
+            wardSelect.addEventListener('change', updateFullAddress);
+            streetAddressInput.addEventListener('input', updateFullAddress);
+
+            // Initialize
+            loadProvinces();
+        });
+    </script>
+</body>
+</html>

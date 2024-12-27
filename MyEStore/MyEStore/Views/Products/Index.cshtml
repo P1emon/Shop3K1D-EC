@@ -82,22 +82,29 @@
 </div>
 
 
-
-<!-- Overlay để phát hiện click -->
 <div id="overlay"></div>
 
 <!-- Thanh trượt ưu đãi -->
 <div id="promo-slide-bar">
     <h2>Ưu đãi đặc biệt!</h2>
-    <form id="promo-form" onsubmit="handleSubscribe(event)">
-        <label for="email">Email của bạn:</label>
-        <input type="email" id="email" placeholder="Nhập email để nhận ưu đãi" required />
+    <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" method="post" action="https://gmail.us12.list-manage.com/subscribe/post?u=f5d09299c989c215c0ba0e855&amp;id=f333cca46f&amp;f_id=00d343e0f0" target="_blank">
+        <label for="mce-EMAIL">Email của bạn:</label>
+        <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Nhập email để nhận ưu đãi" required />
         <button type="submit">Đăng ký ngay</button>
+        <div aria-hidden="true" style="position: absolute; left: -5000px;">
+            <!-- Bảo vệ chống spam -->
+            <input type="text" name="b_f5d09299c989c215c0ba0e855_f333cca46f" tabindex="-1" value="">
+        </div>
+        <div id="mce-responses">
+            <div id="mce-error-response" style="display: none; color: red;"></div>
+            <div id="mce-success-response" style="display: none; color: green;"></div>
+        </div>
     </form>
 </div>
 
 <!-- Nút Nhận ưu đãi -->
 <button id="open-promo-slide">Nhận ưu đãi!</button>
+
 
 <!-- CSS -->
 <style>
@@ -368,13 +375,13 @@
 </style>
 
 
-<!-- Thêm thư viện SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const promoSlideBar = document.getElementById('promo-slide-bar');
     const overlay = document.getElementById('overlay');
     const openPromoSlide = document.getElementById('open-promo-slide');
+    const subscribeForm = document.getElementById('mc-embedded-subscribe-form');
 
     // Mở thanh trượt và hiển thị overlay
     openPromoSlide.addEventListener('click', () => {
@@ -393,10 +400,11 @@
         promoSlideBar.classList.remove('active');
     });
 
-    // Xử lý logic đăng ký
-    async function handleSubscribe(event) {
-        event.preventDefault();
-        const emailInput = document.getElementById('email').value;
+    // Xử lý logic đăng ký và gửi email đến Mailchimp
+    subscribeForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); // Ngừng chuyển trang đến Mailchimp
+
+        const emailInput = document.getElementById('mce-EMAIL').value;
 
         if (!emailInput) {
             Swal.fire({
@@ -418,7 +426,7 @@
         // Ẩn thanh trượt và overlay sau khi thông báo
         promoSlideBar.classList.remove('active');
         overlay.classList.remove('active');
-    }
-</script>
+    });
 
+</script>
 

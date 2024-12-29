@@ -137,7 +137,7 @@ namespace MyEStore.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
-            if (userId == null)
+            if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Login");
             }
@@ -146,29 +146,69 @@ namespace MyEStore.Controllers
 
             if (customer == null)
             {
-                return NotFound("Customer not found.");
+                return NotFound("Không tìm thấy thông tin người dùng.");
             }
 
             var model = new ProfileVM
             {
-                UserName = customer.MaKh,
                 FullName = customer.HoTen,
-                Email = customer.Email,
-                Phone = customer.DienThoai,
-                Password = customer.MatKhau
+                Email = customer.Email
             };
 
             return View(model);
         }
 
-        // POST: Update Profile
+        // POST: Profile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Profile(ProfileVM model)
         {
             if (!ModelState.IsValid)
             {
+                TempData["Error"] = "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.";
                 return View(model);
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var customer = _ctx.KhachHangs.SingleOrDefault(kh => kh.MaKh == userId);
+
+            if (customer == null)
+            {
+                TempData["Error"] = "Không tìm thấy thông tin người dùng.";
+                return View(model);
+            }
+
+            if (_ctx.KhachHangs.Any(kh => kh.Email == model.Email && kh.MaKh != userId))
+            {
+                TempData["Error"] = "Email đã được sử dụng bởi người dùng khác.";
+                return View(model);
+            }
+
+            customer.HoTen = model.FullName;
+            customer.Email = model.Email;
+
+            _ctx.SaveChanges();
+
+            TempData["Success"] = "Thông tin của bạn đã được cập nhật thành công.";
+            return RedirectToAction("Profile");
+        }
+
+
+        // POST: Change Password
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(string Password, string NewPassword, string ConfirmPassword)
+        {
+            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(NewPassword) || string.IsNullOrEmpty(ConfirmPassword))
+            {
+                TempData["Error"] = "Vui lòng điền đủ thông tin.";
+                return RedirectToAction("Profile");
             }
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
@@ -185,17 +225,29 @@ namespace MyEStore.Controllers
                 return NotFound("Customer not found.");
             }
 
-            // Update customer information
-            customer.HoTen = model.FullName;
-            customer.Email = model.Email;
-            customer.DienThoai = model.Phone;
-            customer.MatKhau = model.Password;
+            // Validate current password using Bcrypt
+            if (!BCrypt.Net.BCrypt.Verify(Password, customer.MatKhau))
+            {
+                TempData["Error"] = "Mật khẩu hiện tại không chính xác.";
+                return RedirectToAction("Profile");
+            }
 
+            // Validate new password and confirmation
+            if (NewPassword != ConfirmPassword)
+            {
+                TempData["Error"] = "Mật khẩu mới và mật khẩu xác nhận không khớp.";
+                return RedirectToAction("Profile");
+            }
+
+            // Hash new password using Bcrypt
+            customer.MatKhau = BCrypt.Net.BCrypt.HashPassword(NewPassword);
             _ctx.SaveChanges();
 
-            TempData["Success"] = "Your profile has been updated successfully.";
+            TempData["Success"] = "Mật khẩu của bạn đã được thay đổi thành công.";
             return RedirectToAction("Profile");
         }
+
+
         // Hiển thị lịch sử giao dịch của khách hàng
         public IActionResult TransactionHistory()
         {

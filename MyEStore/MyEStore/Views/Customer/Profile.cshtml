@@ -3,30 +3,32 @@
 <!-- Profile Page -->
 <div class="container py-5" id="profilePage">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient text-Black text-center">
-            <h5 class="fw-bold">Thông tin cá nhân</h5>
+        <div class="card-header bg-gradient text-black text-center position-relative">
+            <h5 class="fw-bold">Thông tin cá nhân</h5>
             <i class="bi bi-x-lg text-danger position-absolute top-0 end-0 m-2" id="closeProfilePage" role="button" aria-label="Close"></i>
         </div>
         <div class="card-body p-5">
-            <form asp-action="UpdateProfile" method="post">
+            <form asp-action="Profile" method="post" id="profileForm">
                 <!-- Full Name -->
-                <div class="mb-4">
-                    <label asp-for="FullName" class="form-label fw-bold">Họ và Tên</label>
-                    <input asp-for="FullName" class="form-control form-control-lg" />
+                <div class="mb-4 position-relative">
+                    <label asp-for="FullName" class="form-label fw-bold">Họ và Tên</label>
+                    <input asp-for="FullName" class="form-control form-control-lg" readonly />
+                    <i class="bi bi-pencil-square text-primary position-absolute top-50 end-0 translate-middle-y me-3" role="button" aria-label="Edit" onclick="toggleEdit(this, 'FullName')"></i>
                     <span asp-validation-for="FullName" class="text-danger"></span>
                 </div>
 
                 <!-- Email -->
-                <div class="mb-4">
+                <div class="mb-4 position-relative">
                     <label asp-for="Email" class="form-label fw-bold">Email</label>
-                    <input asp-for="Email" type="email" class="form-control form-control-lg" />
+                    <input asp-for="Email" type="email" class="form-control form-control-lg" readonly />
+                    <i class="bi bi-pencil-square text-primary position-absolute top-50 end-0 translate-middle-y me-3" role="button" aria-label="Edit" onclick="toggleEdit(this, 'Email')"></i>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
                 <!-- Buttons -->
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary btn-lg">Lưu thông tin</button>
-                    <button type="button" class="btn btn-outline-primary btn-lg" id="changePasswordBtn">Đổi mật khẩu</button>
+                    <button type="submit" class="btn btn-primary btn-lg" id="saveBtn" disabled>Lưu thông tin</button>
+                    <button type="button" class="btn btn-outline-primary btn-lg" id="changePasswordBtn">Đổi mật khẩu</button>
                 </div>
             </form>
         </div>
@@ -44,20 +46,23 @@
             <form asp-action="ChangePassword" method="post">
                 <!-- Current Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Mật khẩu hiện tại</label>
-                    <input name="CurrentPassword" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu hiện tại" required />
+                    <label asp-for="Password" class="form-label fw-bold">Mật khẩu hiện tại</label>
+                    <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu hiện tại" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
                 <!-- New Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Mật khẩu mới</label>
-                    <input name="NewPassword" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu mới" required />
+                    <label asp-for="NewPassword" class="form-label fw-bold">Mật khẩu mới</label>
+                    <input asp-for="NewPassword" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu mới" required />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Nhập lại mật khẩu</label>
-                    <input name="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Nhập lại mật khẩu mới" required />
+                    <label asp-for="ConfirmPassword" class="form-label fw-bold">Nhập lại mật khẩu</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Nhập lại mật khẩu mới" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
 
                 <!-- Save Button -->
@@ -108,6 +113,20 @@
             }, 500);
         });
     });
+</script>
+<script>
+    // Toggle edit mode for input fields
+    function toggleEdit(icon, fieldName) {
+        const input = document.querySelector(`[name="${fieldName}"]`);
+        if (input.hasAttribute('readonly')) {
+            input.removeAttribute('readonly');
+            icon.classList.replace('bi-pencil-square', 'bi-check-square');
+            document.getElementById('saveBtn').disabled = false;
+        } else {
+            input.setAttribute('readonly', '');
+            icon.classList.replace('bi-check-square', 'bi-pencil-square');
+        }
+    }
 </script>
 
 <!-- Styling -->

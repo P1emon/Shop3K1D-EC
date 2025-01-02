@@ -1,0 +1,57 @@
+﻿@model List<Thongbao>
+
+<div class="notification-wrapper">
+    <div class="notification-list">
+
+        <div class="order-list">
+    <h3>Danh sách đơn hàng</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt</th>
+                <th>Ngày giao dự kiến</th>
+                <th>Số ngày còn lại</th>
+            </tr>
+        </thead>
+        <tbody>
+                    @foreach (var order in Model)
+                    {
+                    <tr>
+                        <td>@order.MaHd</td>
+                        <td>@order.NgayDat.ToString("dd/MM/yyyy")</td>
+                        <td>@order.NgayGiao?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                                @if (order.DaysToDelivery.HasValue)
+                                {
+                                    if (order.DaysToDelivery.Value > 7)
+                                    {
+                                            <span class="remaining-days-green">@order.DaysToDelivery.Value ngày</span>
+                                    }
+                                    else if (order.DaysToDelivery.Value >= 4 && order.DaysToDelivery.Value <= 7)
+                                    {
+                                            <span class="remaining-days-yellow">@order.DaysToDelivery.Value ngày</span>
+                                    }
+                                    else if (order.DaysToDelivery.Value >= 0)
+                                    {
+                                            <span class="remaining-days-red">@order.DaysToDelivery.Value ngày</span>
+                                    }
+                                    else
+                                    {
+                                            <span class="delivered">Đang giao hoặc đã nhận</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="no-info">Không có thông tin</span>
+                                }
+                        </td>
+                    </tr>
+                    }
+        </tbody>
+    </table>
+</div>
+
+    </div>
+</div>
+<link rel="stylesheet" href="/css/thongbao.css">

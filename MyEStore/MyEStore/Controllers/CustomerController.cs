@@ -429,7 +429,47 @@ namespace MyEStore.Controllers
             // Truyền thông tin khách hàng vào View
             return View(customer);
         }
+        // Cập nhật phương thức trong Controller - OrderDetails
+       public IActionResult Thongbao()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Lấy ngày hôm nay (bỏ phần thời gian)
+            var today = DateTime.Today;
+
+            var orders = _ctx.HoaDons
+                .Where(hd => hd.MaKh == userId && hd.NgayDat.Date >= today)
+                .Include(hd => hd.ChiTietHds)
+                .OrderByDescending(hd => hd.NgayDat)
+                .Select(hd => new
+                {
+                    hd.MaHd,
+                    hd.NgayDat,
+                    hd.NgayGiao,
+                    DaysToDelivery = hd.NgayGiao.HasValue ? (hd.NgayGiao.Value - DateTime.Now).Days : (int?)null
+                })
+                .ToList();
+
+            var model = orders.Select(o => new Thongbao
+            {
+                MaHd = o.MaHd,
+                NgayDat = o.NgayDat,
+                NgayGiao = o.NgayGiao,
+                DaysToDelivery = o.DaysToDelivery
+            }).ToList();
+
+            // Lấy số lượng đơn hàng sắp giao trong vòng 7 ngày tới
+            var upcomingDeliveriesCount = orders.Count(o => o.DaysToDelivery.HasValue && o.DaysToDelivery.Value <= 99);
+            // Truyền số lượng thông báo vào View
+            ViewData["UpcomingDeliveriesCount"] = upcomingDeliveriesCount;
+
+            return View(model);
+        }
 
     }
 }

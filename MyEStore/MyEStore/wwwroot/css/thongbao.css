@@ -1,0 +1,119 @@
+﻿/* Định dạng vùng hiển thị */
+.notification-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Chiều cao toàn màn hình */
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Định dạng bảng */
+.notification-list {
+    width: 80%;
+    max-width: 1200px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .notification-list h3 {
+        text-align: center;
+        padding: 15px;
+        margin: 0;
+        background-color: #3f4750;
+        color: white;
+        font-size: 20px;
+    }
+
+    /* Định dạng tiêu đề bảng */
+    .notification-list table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .notification-list th,
+    .notification-list td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    .notification-list thead th {
+        background-color: #333;
+        color: white;
+    }
+
+    /* Hàng nền xen kẽ */
+    .notification-list tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    /* Hiệu ứng hover */
+    .notification-list tr:hover {
+        background-color: #e6f7ff;
+        transition: 0.2s ease;
+    }
+
+/* Trạng thái (hoàn thành, lỗi, chờ...) */
+.status-success {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-error {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Nút chi tiết */
+.view-details {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .view-details:hover {
+        background-color: #138496;
+    }
+/* Định dạng cho các trạng thái "Ngày còn lại" */
+.remaining-days-green {
+    color: green;
+    font-weight: bold;
+}
+
+.remaining-days-yellow {
+    color: orange;
+    font-weight: bold;
+}
+
+.remaining-days-red {
+    color: red;
+    font-weight: bold;
+}
+/* Container để căn giữa */
+

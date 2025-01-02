@@ -46,9 +46,18 @@
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Profile"><i class="bi bi-person-circle"></i> Cập nhật hồ sơ</a></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="TransactionHistory"><i class="bi bi-bag-check"></i> Đơn hàng từng mua</a></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Address"><i class="bi bi-geo-alt-fill"></i> Địa chỉ nhận hàng</a></li>
-                                    <li>
+                                    @* <li>
                                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#notificationModal">
                                             <i class="bi bi-bell"></i> Thông báo
+                                        </a>
+                                    </li> *@
+                                    <li >
+                                            <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Thongbao">
+                                            <i class="bi bi-bell"></i> Thông báo
+                                            @if (ViewData["UpcomingDeliveriesCount"] != null && (int)ViewData["UpcomingDeliveriesCount"] > 0)
+                                            {
+                                                  <span class="badge bg-danger">@ViewData["UpcomingDeliveriesCount"]</span>
+                                            }
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
@@ -75,7 +84,7 @@
         </main>
     </div>
 
-    <!-- Modal Alert -->
+   @*  <!-- Modal Alert -->
     <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -91,7 +100,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
     <footer class="border-top footer text-muted bg-dark text-white mt-4">
         <div class="container text-center py-3">
